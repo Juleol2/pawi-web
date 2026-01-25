@@ -385,8 +385,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const petId = docSnap.id;
                 
                 // QR Generator
-                const mySite = window.location.origin; 
-                const linkDestino = `${mySite}/encontrado.html?id=${petId}`;
+               // QR Generator
+// 1. Obtenemos la ruta completa (ej: /pawi-app/mis_mascotas.html)
+const path = window.location.pathname;
+// 2. Quitamos el nombre del archivo final para quedarnos con la carpeta base
+const basePath = path.substring(0, path.lastIndexOf('/'));
+// 3. Unimos el origen + la carpeta (ej: https://juleol2.github.io + /pawi-app)
+const mySite = window.location.origin + basePath; 
+
+const linkDestino = `${mySite}/encontrado.html?id=${petId}`;
                 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(linkDestino)}`;
 
                 grid.innerHTML += `
@@ -562,4 +569,5 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'login.html';
         });
     }
+
 });
