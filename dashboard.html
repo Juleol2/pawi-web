@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background-color: #f4f6f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
+
+        /* Estilo para el botón de Alerta en el Navbar */
+.btn-nav-alert {
+    background-color: #dc2626; /* Rojo emergencia */
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px; /* Bordes redondos */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+}
+
+.btn-nav-alert:hover {
+    background-color: #b91c1c; /* Rojo más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Pequeño efecto de elevación */
+    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
+}
+
+/* Animación de pulso suave para llamar la atención (Opcional) */
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.btn-nav-alert {
+    animation: pulse-red 2s infinite;
+}
+        .nav-link:hover { color: #F37021; }
+        
+        .nav-user-badge {
+            display: flex; align-items: center; gap: 10px;
+            background-color: #FFF0E6; 
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: #F37021;
+            font-weight: 700;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* --- TARJETA DE BIENVENIDA --- */
+        .welcome-card {
+            background-color: white;
+            border-radius: 30px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::after {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 10px; background-color: #F37021;
+        }
+
+        .welcome-text h1 { font-size: 36px; font-weight: 800; color: #111; margin-bottom: 10px; }
+        .welcome-text p { font-size: 18px; color: #666; max-width: 500px; }
+        
+        .welcome-img {
+            width: 220px; height: auto;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); }
+        }
+
+        /* --- GRID DE 5 OPCIONES --- */
+        .dashboard-grid {
+            display: grid;
+            /* Se ajusta automáticamente, pero intentará poner tantos como quepan */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        /* Estilo base de las tarjetas normales */
+        .menu-card {
+            background-color: white;
+            border-radius: 25px;
+            padding: 30px 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(243, 112, 33, 0.15);
+            border-color: #F37021;
+        }
+
+        .card-icon { 
+            font-size: 40px; 
+            margin-bottom: 20px; 
+            background-color: #fef5f0; 
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .card-title { font-size: 16px; font-weight: 700; color: #333; }
+
+
+        /* --- ESTILO ESPECIAL PARA EL BOTÓN DE ALERTA (EL 5TO) --- */
+        .menu-card.alert-mode {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); /* Fondo Rojo Degradado */
+            color: white;
+            border: none;
+            /* Sombra roja resplandeciente */
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+            /* Animación de latido */
+            animation: pulse-border 2s infinite;
+        }
+
+        .menu-card.alert-mode:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(220, 38, 38, 0.6);
+        }
+
+        .menu-card.alert-mode .card-icon {
+            background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente blanco */
+            color: white;
+            font-size: 50px;
+        }
+
+        .menu-card.alert-mode .card-title {
+            color: white;
+            font-size: 18px; /* Un poco más grande */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Definición de la animación de pulso */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+
+        /* --- FOOTER --- */
+        .footer { background-color: #1F2937; color: white; padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer-address { font-size: 18px; font-weight: 600; }
+        .footer-contact { font-size: 16px; color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+   <nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+        <span class="logo-text">Pawi</span>
+    </a>
+
+    <div class="nav-links">
+        <a href="#" class="btn-nav-alert" onclick="alert('Funcionalidad de alerta en construcción')">
+            🚨 Generar Alerta
+        </a>
+
+        <a href="dashboard.html" class="nav-link">Inicio</a>
+        
+        <div class="nav-user-badge">
+            <span>👤 <span id="navUserName">Cargando...</span></span>
+        </div>
+        
+        <a href="login.html" class="nav-link" style="color: #dc2626;">Salir</a>
+    </div>
+</nav>
+
+
+    <div class="container">
+        
+        <div class="welcome-card">
+            <div class="welcome-text">
+    <h1>Hola, <span id="welcomeName">Usuario</span>!<br>¿Qué quieres hacer hoy?</h1>
+    <p>Gestiona el cuidado y seguridad de tu mascota desde un solo lugar.</p>
+</div>
+            <img src="1.jpg" alt="Perro Detective" class="welcome-img">
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="menu-card" onclick="window.location.href='mis_mascotas.html'">
+    <div class="card-icon" style="background-color: #e0f2fe; color: #0284c7;">🐾</div>
+    <h3 class="card-title">Ver mis<br>mascotas</h3>
+</div>
+            
+            <div class="menu-card" onclick="window.location.href='registro_mascota.html'">
+                <div class="card-icon">🐕</div>
+                <h3 class="card-title">Registrar una<br>mascota</h3>
+            </div>
+
+            <div class="menu-card" onclick="window.location.href='collar.html'">
+                <div class="card-icon">📿</div>
+                <h3 class="card-title">Obtener un<br>collar</h3>
+            </div>
+
+            <div class="menu-card" onclick="window.location.href='pet_map.html'">
+                <div class="card-icon">📍</div>
+                <h3 class="card-title">Pet<br>Map</h3>
+            </div>
+
+            <div class="menu-card" onclick="window.location.href='foro.html'">
+                <div class="card-icon">💬</div>
+                <h3 class="card-title">Foro<br>Comunitario</h3>
+            </div>
+
+ 
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
+            <p class="footer-contact">📞 Contacto: 093918273</p>
+            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2024 PAWI - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+<script type="module" src="main.js"></script>
+</body>
+
+</html>

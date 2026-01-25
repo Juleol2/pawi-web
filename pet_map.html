@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Pet Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; }
+
+        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+
+        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px; }
+        
+        .map-card {
+            background-color: white; width: 100%; max-width: 900px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex;
+        }
+
+        .map-preview {
+            flex: 1.2; background-color: #e0e7ff; overflow: hidden; position: relative; cursor: pointer;
+        }
+        .map-preview img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .map-preview:hover img { transform: scale(1.05); }
+        .map-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s;
+        }
+        .map-preview:hover .map-overlay { opacity: 1; }
+        .btn-enter-map { background: white; padding: 10px 20px; border-radius: 20px; font-weight: 700; color: #111; }
+
+        .map-info { flex: 1; padding: 60px 40px; display: flex; flex-direction: column; justify-content: center; }
+        .map-title { font-size: 36px; font-weight: 800; color: #1F2937; margin-bottom: 20px; }
+        .map-desc { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+        .btn-action { background-color: #F37021; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; align-self: start; }
+        .btn-action:hover { background-color: #d85c15; }
+
+        .footer { background-color: #1F2937; color: white; padding: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="nav-logo"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img"><span class="logo-text">Pawi</span></a>
+        <div><a href="dashboard.html" style="text-decoration:none; color:#333; font-weight:600;">Volver</a></div>
+    </nav>
+
+    <div class="container">
+        <div class="map-card">
+            <a href="map_detail.html" class="map-preview">
+                <img src="https://img.freepik.com/premium-vector/city-map-navigation-smartphone-with-pointers_349999-281.jpg?w=740" alt="Mapa">
+                <div class="map-overlay">
+                    <span class="btn-enter-map">Abrir Mapa Interactivo</span>
+                </div>
+            </a>
+            
+            <div class="map-info">
+                <h1 class="map-title">Explora tu zona</h1>
+                <p class="map-desc">
+                    Conoce los colores de seguridad de cada área. Encuentra veterinarios verificados, refugios y zonas seguras para pasear a tu mascota en Guayaquil.
+                </p>
+                <button class="btn-action" onclick="window.location.href='map_detail.html'">Ver Mapa Completo</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2024 PAWI - Todos los derechos reservados.</p></footer>
+</body>
+</html>

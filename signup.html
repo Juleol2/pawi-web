@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Registrarse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            background-color: #f4f6f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
+        .nav-link:hover { color: #F37021; }
+        .btn-report { background-color: #F37021; color: white; padding: 12px 25px; border-radius: 30px; font-weight: 700; text-decoration: none; transition: transform 0.2s; }
+        .btn-report:hover { transform: scale(1.05); background-color: #d85c15; }
+
+        /* --- SECCIÓN REGISTRO --- */
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .login-card {
+            background-color: white;
+            width: 100%;
+            max-width: 950px;
+            height: 650px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Lado Izquierdo */
+        .login-visual {
+            flex: 1;
+            background-color: #F37021;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        .login-visual::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+        }
+
+        .visual-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+            z-index: 2;
+        }
+
+        .visual-text {
+            font-size: 32px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; z-index: 2;
+        }
+
+        /* Lado Derecho */
+        .login-form-container {
+            flex: 1.2;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-title { font-size: 26px; font-weight: 800; color: #111; margin-bottom: 5px; }
+        .login-subtitle { font-size: 14px; color: #888; margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        .form-input, .form-select {
+            width: 100%; padding: 12px 15px; background-color: #f0f2f5;
+            border: 1px solid transparent; border-radius: 12px;
+            font-size: 14px; color: #333; outline: none; transition: 0.3s;
+        }
+        .form-input:focus, .form-select:focus {
+            background-color: #fff; border-color: #F37021; box-shadow: 0 0 0 4px rgba(243, 112, 33, 0.1);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2093.3c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%20106.3c3.6-3.6%205.4-7.8%205.4-12.8%200-5-1.8-9.3-5.4-12.9z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 15px center; background-size: 10px; cursor: pointer;
+        }
+
+        .btn-submit {
+            width: 100%; background-color: #1F2937; color: white; padding: 15px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 600;
+            cursor: pointer; margin-top: 10px; margin-bottom: 20px; transition: 0.2s;
+        }
+        .btn-submit:hover { background-color: #000; }
+
+        .form-footer { text-align: center; font-size: 13px; color: #666; }
+        .form-footer a { text-decoration: none; color: #F37021; font-weight: 700; }
+        .form-footer a:hover { text-decoration: underline; }
+
+        .footer { background-color: #1F2937; color: white; padding: 40px 20px; text-align: center; }
+        .footer-address { font-size: 18px; font-weight: 600; }
+        .footer-contact { font-size: 16px; color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Pawi</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="quienes_somos.html" class="nav-link">Quiénes somos</a>
+            <a href="#" class="btn-report">Generar reporte</a>
+            <a href="login.html" class="nav-link">Acceder</a>
+        </div>
+    </nav>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <div class="login-visual">
+                <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo Pawi" class="visual-logo">
+                <div class="visual-text">PAWI</div>
+            </div>
+
+            <div class="login-form-container">
+                <h2 class="login-title">Crea una cuenta</h2>
+                <p class="login-subtitle">Únete a nuestra comunidad hoy mismo.</p>
+
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label class="form-label" for="signupName">Nombre</label>
+                        <input type="text" id="signupName" name="fullName" class="form-input" placeholder="Ej: Jiara Martins" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signupEmail">Correo Electrónico</label>
+                        <input type="email" id="signupEmail" name="email" class="form-input" placeholder="hello@reallygreatsite.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signupPassword">Contraseña</label>
+                        <input type="password" id="signupPassword" name="password" class="form-input" placeholder="******" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signupType">Tipo de Usuario</label>
+                        <select id="signupType" name="userType" class="form-select" required>
+                            <option value="" disabled selected>Seleccionar</option>
+                            <option value="owner">Dueño de mascota</option>
+                            <option value="vet">Veterinario</option>
+                            <option value="shelter">Refugio</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Registrarse</button>
+
+                    <div class="form-footer">
+                        ¿Ya tienes cuenta? <a href="login.html">Inicia Sesión</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
+            <p class="footer-contact">📞 Contacto: 093918273</p>
+            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2024 PAWI - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

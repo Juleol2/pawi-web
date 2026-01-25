@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Mapa Interactivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
+
+        /* --- NAVBAR --- */
+        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-link { text-decoration: none; color: #333; font-weight: 600; transition: color 0.3s; }
+        .nav-link:hover { color: #F37021; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        
+        /* Tarjeta Grande del Mapa */
+        .map-detail-card {
+            background-color: white; width: 100%; max-width: 1100px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        /* Cabecera de la tarjeta */
+        .map-header-section {
+            padding: 30px 40px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;
+        }
+        .map-heading h2 { font-size: 24px; font-weight: 700; color: #1F2937; }
+        .map-heading p { font-size: 14px; color: #666; margin-top: 5px; }
+
+        /* Contenedor del Mapa (Google Maps) */
+        .map-frame-container {
+            width: 100%;
+            height: 500px; /* Altura del mapa */
+            background-color: #eee;
+            position: relative;
+        }
+        
+        .map-iframe {
+            width: 100%; height: 100%; border: 0;
+        }
+
+        /* Leyenda de Colores */
+        .legend-section {
+            padding: 30px 40px; background-color: #fff;
+        }
+        .legend-title { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        
+        .legend-grid {
+            display: flex; gap: 30px; flex-wrap: wrap;
+        }
+        
+        .legend-item { display: flex; align-items: center; gap: 12px; }
+        .color-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        /* Colores específicos */
+        .dot-orange { background-color: #F37021; }
+        .dot-blue { background-color: #12009E; }
+        .dot-green { background-color: #10B981; } /* Agregué uno extra por si acaso */
+
+        .legend-label { font-size: 15px; font-weight: 600; color: #444; }
+
+        /* Footer */
+        .footer { background-color: #1F2937; color: white; padding: 40px; text-align: center; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="dashboard.html" class="nav-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Pawi</span>
+        </a>
+        <div class="nav-links">
+            <a href="pet_map.html" class="nav-link">← Volver</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="map-detail-card">
+            
+            <div class="map-header-section">
+                <div class="map-heading">
+                    <h2>Zonas Seguras</h2>
+                    <p>Visualiza las áreas verificadas y colores de seguridad en tu sector.</p>
+                </div>
+                </div>
+
+            <div class="map-frame-container">
+                <iframe 
+                    class="map-iframe"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.05055375217!2d-79.9605336367397!3d-2.152431699999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x902d6d0d46720c2b%3A0x2649b06827054f30!2sGuayaquil%2C%20Ecuador!5e0!3m2!1ses!2s!4v1709845000000!5m2!1ses!2s" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <div class="legend-section">
+                <div class="legend-title">Leyenda de Colores</div>
+                <div class="legend-grid">
+                    
+                    <div class="legend-item">
+                        <div class="color-dot dot-orange"></div>
+                        <span class="legend-label">Parroquia Febres Cordero</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <div class="color-dot dot-blue"></div>
+                        <span class="legend-label">Parroquia Tarqui</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <div class="color-dot dot-green"></div>
+                        <span class="legend-label">Zonas de Parques Seguros</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2024 PAWI - Todos los derechos reservados.</p></footer>
+
+</body>
+</html>

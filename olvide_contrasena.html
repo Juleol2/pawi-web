@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Recuperar Contraseña</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
+
+        /* NAVBAR */
+        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+
+        /* CARD */
+        .wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background-color: white; width: 100%; max-width: 500px; padding: 50px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; }
+        
+        .title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #111; }
+        .subtitle { font-size: 14px; color: #666; margin-bottom: 30px; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; margin-bottom: 8px; text-transform: uppercase; }
+        .form-input { width: 100%; padding: 15px; background-color: #f0f2f5; border: 1px solid transparent; border-radius: 12px; font-size: 15px; outline: none; }
+        .form-input:focus { background-color: #fff; border-color: #F37021; }
+
+        .btn-submit { width: 100%; background-color: #F37021; color: white; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-submit:hover { background-color: #d85c15; }
+
+        .back-link { display: block; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; font-weight: 600; }
+        .back-link:hover { color: #F37021; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Pawi</span>
+        </a>
+    </nav>
+
+    <div class="wrapper">
+        <div class="card">
+            <h1 class="title">¿Olvidaste tu contraseña?</h1>
+            <p class="subtitle">Ingresa tu correo y te enviaremos un enlace para recuperarla.</p>
+
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" id="resetEmail" class="form-input" placeholder="ejemplo@correo.com" required>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Correo</button>
+            </form>
+
+            <a href="login.html" class="back-link">← Volver a Iniciar Sesión</a>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

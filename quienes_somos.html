@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Quiénes Somos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #F37021; }
+        .btn-report { background-color: #F37021; color: white; padding: 12px 25px; border-radius: 30px; font-weight: 700; text-decoration: none; transition: transform 0.2s; }
+        .btn-report:hover { transform: scale(1.05); background-color: #d85c15; }
+
+        /* --- SECCIÓN PRINCIPAL --- */
+        .mission-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 50px;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .mission-text {
+            flex: 1; 
+        }
+
+        .mission-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #F37021;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .mission-quote {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            color: #1F2937;
+        }
+
+        .mission-description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* --- CARRUSEL Y TEXTO --- */
+        .mission-img-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; 
+        }
+
+        .slider-box-window {
+            width: 100%;
+            max-width: 600px; 
+            height: 450px; 
+            border-radius: 30px;
+            overflow: hidden; 
+            position: relative;
+            background-color: #f8f8f8; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .slide-track {
+            display: flex;
+            height: 100%;
+            /* CORRECCIÓN MATEMÁTICA: 12 fotos totales * 500px cada una */
+            width: calc(500px * 12); 
+            animation: scroll 30s linear infinite; /* Un poco más lento para fotos grandes */
+        }
+
+        .slide {
+            /* CORRECCIÓN: Ancho solicitado por el usuario */
+            width: 500px; 
+            height: 100%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* --- ESTILO DEL TEXTO NUEVO --- */
+        .slider-caption {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #d85c15; 
+            background-color: #FFF0E6;
+            padding: 8px 20px;
+            border-radius: 50px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            /* CORRECCIÓN MATEMÁTICA: Se mueve el ancho de las 6 fotos originales (6 * 500px = 3000px) */
+            100% { transform: translateX(-3000px); } 
+        }
+
+
+        /* --- SECCIÓN VALORES --- */
+        .values-section {
+            background-color: #f9f9f9;
+            padding: 80px 50px;
+            text-align: center;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .value-card h3 { font-size: 20px; margin-bottom: 10px; color: #1F2937; }
+        .value-card p { color: #666; font-size: 15px; }
+        .value-icon { font-size: 40px; margin-bottom: 15px; display: block; }
+
+        /* --- FOOTER --- */
+        .footer { margin-top: auto; background-color: #1F2937; color: white; padding: 40px 20px; text-align: center; }
+        .footer-address { font-size: 18px; font-weight: 600; }
+        .footer-contact { font-size: 16px; color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Pawi</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="quienes_somos.html" class="nav-link active">Quiénes somos</a>
+            <a href="#" class="btn-report">Generar reporte</a>
+            <a href="login.html" class="nav-link">Acceder</a>
+        </div>
+    </nav>
+
+
+    <section class="mission-section">
+        <div class="mission-text">
+            <span class="mission-title">Nuestra Misión</span>
+            <h1 class="mission-quote">
+                Queremos que la familia esté reunida.
+            </h1>
+            <p class="mission-description">
+                Sabemos que una mascota no es solo un animal, es un miembro más del hogar. En PAWI utilizamos tecnología y comunidad para asegurar que, si se pierden, puedan encontrar el camino de regreso a casa.
+            </p>
+            <p class="mission-description">
+                Nacimos en Guayaquil con un objetivo claro: reducir ese 76% de mascotas que nunca regresan.
+            </p>
+        </div>
+
+        <div class="mission-img-container">
+            <div class="slider-box-window">
+                <div class="slide-track">
+                    <div class="slide"><img src="perrobusca1.jpg" alt="Perro 1"></div>
+                    <div class="slide"><img src="perrobusca2.jpg" alt="Perro 2"></div>
+                    <div class="slide"><img src="perrobusca3.jpg" alt="Perro 3"></div>
+                    <div class="slide"><img src="perrobusca4.jpg" alt="Perro 4"></div>
+                    <div class="slide"><img src="perrobusca5.jpg" alt="Perro 5"></div>
+                    <div class="slide"><img src="perrobusca6.jpg" alt="Perro 6"></div>
+
+                    <div class="slide"><img src="perrobusca1.jpg" alt="Perro 1"></div>
+                    <div class="slide"><img src="perrobusca2.jpg" alt="Perro 2"></div>
+                    <div class="slide"><img src="perrobusca3.jpg" alt="Perro 3"></div>
+                    <div class="slide"><img src="perrobusca4.jpg" alt="Perro 4"></div>
+                    <div class="slide"><img src="perrobusca5.jpg" alt="Perro 5"></div>
+                    <div class="slide"><img src="perrobusca6.jpg" alt="Perro 6"></div>
+                </div>
+            </div>
+            
+            <p class="slider-caption">Queremos ayudar a reducir estos casos.</p>
+        </div>
+    </section>
+
+
+    <section class="values-section">
+        <div class="values-grid">
+            <div class="value-card">
+                <span class="value-icon">🛡️</span>
+                <h3>Seguridad</h3>
+                <p>Verificamos cada refugio y veterinaria para tu tranquilidad.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">🧡</span>
+                <h3>Comunidad</h3>
+                <p>Creamos una red de apoyo entre dueños y amantes de los animales.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-icon">📍</span>
+                <h3>Tecnología</h3>
+                <p>Mapas inteligentes y collares QR para una ubicación rápida.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
+            <p class="footer-contact">📞 Contacto: 093918273</p>
+            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2024 PAWI - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

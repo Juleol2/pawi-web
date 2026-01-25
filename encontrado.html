@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Mascota Encontrada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; padding: 20px; }
+
+        .alert-card {
+            background-color: white; width: 100%; max-width: 400px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px 30px; text-align: center;
+            border-top: 10px solid #F37021;
+        }
+
+        .pet-photo {
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: -80px; background-color: #eee;
+        }
+
+        .title { font-size: 22px; font-weight: 800; color: #111; margin-top: 20px; }
+        .subtitle { font-size: 14px; color: #666; margin-bottom: 20px; }
+        
+        .pet-name { font-size: 28px; font-weight: 800; color: #F37021; margin-bottom: 5px; text-transform: uppercase; }
+        .pet-desc { font-size: 14px; color: #555; background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 25px; }
+
+        /* BOTÓN DE ALERTA */
+        .btn-alert {
+            width: 100%; background-color: #dc2626; color: white; padding: 18px;
+            border: none; border-radius: 15px; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-alert:hover { background-color: #b91c1c; transform: scale(1.02); }
+        .btn-alert:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; }
+
+        .status-msg { margin-top: 15px; font-size: 13px; font-weight: 600; color: #059669; display: none; }
+        .loader { display: none; }
+
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // REEMPLAZA ESTO CON TU PUBLIC KEY DE EMAILJS (Paso 1.5)
+          emailjs.init("skj-Hmz-f8o_8cWLO"); 
+       })();
+    </script>
+</head>
+</head>
+<body>
+
+    <div class="alert-card" id="alertCard" style="display: none;">
+        <img id="foundPetImg" src="" alt="Mascota" class="pet-photo">
+        
+        <h1 class="title">¡Hola! ¿Me encontraste?</h1>
+        <p class="subtitle">Soy una mascota perdida y mi dueño me está buscando.</p>
+        
+        <div class="pet-name" id="foundPetName">...</div>
+        <div class="pet-desc" id="foundPetDesc">...</div>
+
+        <button id="btnSendLocation" class="btn-alert">
+            📍 Notificar ubicación al dueño
+        </button>
+        
+        <p id="locationStatus" class="status-msg">✅ ¡Ubicación enviada con éxito!</p>
+    </div>
+
+    <div id="loadingMsg">Cargando datos de la mascota...</div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

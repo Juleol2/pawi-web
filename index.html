@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Inicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 1. NAVBAR (Barra Superior) --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        /* Estilos para las imágenes del logo */
+        .logo-img {
+            width: 50px;
+            height: auto;
+        }
+
+        .logo-text-img {
+            height: 35px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: #F59E2D;
+        }
+
+        .btn-report {
+            background-color: #F59E2D;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.2s, background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-report:hover {
+            background-color: #d85c15;
+            transform: scale(1.05);
+        }
+
+        .btn-login-outline {
+            border: 2px solid #1F2937;
+            color: #1F2937;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-login-outline:hover {
+            background-color: #1F2937;
+            color: white;
+        }
+
+        /* --- REGLAS RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .navbar { padding: 0 20px; }
+            .nav-links { gap: 10px; }
+            .nav-link { font-size: 14px; }
+            .btn-report, .btn-login-outline { padding: 10px 15px; font-size: 14px; }
+            .logo-text-img { height: 28px; }
+            .logo-img { width: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { height: auto; flex-direction: column; padding: 15px; gap: 15px; }
+            .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; }
+        }
+
+
+        /* --- 2. SECCIÓN PRINCIPAL (Texto) --- */
+        .hero-section {
+            padding: 60px 20px 10px 20px; 
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            color: #1F2937;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .hero-title { font-size: 28px; }
+        }
+
+        .highlight {
+            color: #F37021;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 20px; 
+            font-weight: 300;
+        }
+
+
+        /* --- 3. SLIDER INFINITO (Carrusel Mixto) --- */
+        .slider-container {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+            background-color: #fff;
+            padding: 20px 0;
+            margin-bottom: 50px;
+        }
+
+        /* Ajustado para 16 fotos en total (8 originales + 8 duplicadas) */
+        .slide-track {
+            display: flex;
+            width: calc(300px * 16); 
+            animation: scroll 40s linear infinite; /* Un poco más lento para apreciar las fotos */
+        }
+
+        .slide {
+            width: 300px;
+            height: 250px;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .slide img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Se mueve el ancho de las 8 fotos originales */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-300px * 8)); }
+        }
+
+
+        /* --- 4. FOOTER --- */
+        .footer {
+            margin-top: auto;
+            background-color: #1F2937;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-address {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-contact {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+            <img src="logoImagen.PNG" alt="Logo Pawi" class="logo-img">
+            
+            <img src="logoNombre.PNG" alt="PAWI" class="logo-text-img">
+        </a>
+
+        <div class="nav-links">
+            <a href="reporte.html" class="btn-report">Generar reporte</a>
+            <a href="quienes_somos.html" class="nav-link">Quiénes somos</a>
+            <a href="signup.html" class="nav-link">Registrarse</a>
+            <a href="login.html" class="btn-login-outline">Iniciar sesión</a>
+        </div>
+    </nav>
+
+
+    <section class="hero-section">
+        <h1 class="hero-title">
+            ¿Sabías que solo el <span class="highlight">24%</span> de las mascotas perdidas logra regresar a sus hogares en Guayaquil?
+        </h1>
+        <p class="hero-subtitle">
+            PAWI nace para cambiar esa realidad.
+        </p>
+    </section>
+
+
+    <div class="slider-container">
+        <div class="slide-track">
+            <div class="slide"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400" alt="Perro Beagle"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" alt="Gato Ojos Verdes"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400" alt="Mini Pig"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="Perro Border Collie"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1615087240969-eeff2fa558f2?w=400" alt="Hurón"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400" alt="Gato Naranja"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?w=400" alt="Perro Pug"></div>
+            
+            <div class="slide"><img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400" alt="Gatito Pequeño"></div>
+
+
+            <div class="slide"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400" alt="Perro Beagle"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" alt="Gato Ojos Verdes"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400" alt="Mini Pig"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="Perro Border Collie"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1615087240969-eeff2fa558f2?w=400" alt="Hurón"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400" alt="Gato Naranja"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?w=400" alt="Perro Pug"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=400" alt="Gatito Pequeño"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
+            <p class="footer-contact">📞 Contacto: 0993919389</p>
+            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2025 PAWI - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

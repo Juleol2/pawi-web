@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Elige Modelo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
+
+        /* NAVBAR */
+        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+
+        /* CONTENEDOR */
+        .container { flex: 1; display: flex; justify-content: center; padding: 40px 20px; }
+        
+        .main-card {
+            background-color: white; width: 100%; max-width: 1100px; border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); padding: 50px;
+        }
+
+        .header-section { text-align: center; margin-bottom: 40px; }
+        .page-title { font-size: 32px; font-weight: 800; color: #111; margin-bottom: 10px; }
+        .page-subtitle { color: #666; font-size: 16px; }
+
+        /* SECCIONES DE PRODUCTOS */
+        .category-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; margin-top: 30px;
+        }
+        .cat-title { font-size: 18px; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 1px; }
+        .cat-price { background-color: #FFF0E6; color: #F37021; padding: 5px 15px; border-radius: 20px; font-weight: 700; }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-item {
+            border: 2px solid #f4f6f8; border-radius: 20px; padding: 20px;
+            height: 180px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.2s; background: white;
+            position: relative; overflow: hidden;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Ajuste para que tus imágenes png se vean bien centradas */
+        .product-img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+        /* ESTADO SELECCIONADO (Se activa con JS) */
+        .product-item.selected {
+            border-color: #F37021;
+            background-color: #FFF0E6;
+            box-shadow: 0 0 0 4px rgba(243, 112, 33, 0.2);
+        }
+        .product-item.selected::after {
+            content: '✔'; position: absolute; top: 10px; right: 10px;
+            background: #F37021; color: white; width: 25px; height: 25px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;
+        }
+
+        /* BOTÓN DE ACCIÓN */
+        .actions-area { margin-top: 40px; text-align: center; }
+        .btn-continue {
+            background-color: #ccc; color: white; padding: 15px 40px; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: not-allowed; transition: 0.2s;
+        }
+        .btn-continue.active {
+            background-color: #F37021; cursor: pointer;
+        }
+        .btn-continue.active:hover { background-color: #d85c15; transform: scale(1.05); }
+
+        .footer { background-color: #1F2937; color: white; padding: 40px; text-align: center; margin-top: auto; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="nav-logo"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img"><span class="logo-text">Pawi</span></a>
+        <div><a href="collar.html" style="text-decoration:none; color:#333; font-weight:600;">← Cancelar</a></div>
+    </nav>
+
+    <div class="container">
+        <div class="main-card">
+            
+            <div class="header-section">
+                <h1 class="page-title">Elige el modelo</h1>
+                <p class="page-subtitle">Selecciona el material y color perfecto para tu mascota.</p>
+            </div>
+
+            <div class="category-header">
+                <span class="cat-title">Colección Nylon</span>
+                <span class="cat-price">$2.00</span>
+            </div>
+            
+            <div class="product-grid">
+                <div class="product-item selectable-item" data-name="Nylon Verde" data-price="2.00" data-img="green.png">
+                    <img src="green.png" class="product-img" alt="Green">
+                </div>
+                <div class="product-item selectable-item" data-name="Nylon Azul" data-price="2.00" data-img="blue2.png">
+                    <img src="blue2.png" class="product-img" alt="Blue">
+                </div>
+                <div class="product-item selectable-item" data-name="Nylon Verde Oscuro" data-price="2.00" data-img="green2.png">
+                    <img src="green2.png" class="product-img" alt="Green 2">
+                </div>
+                <div class="product-item selectable-item" data-name="Nylon Morado" data-price="2.00" data-img="purple.png">
+                    <img src="purple.png" class="product-img" alt="Purple">
+                </div>
+            </div>
+
+            <div class="category-header">
+                <span class="cat-title">Colección Cuero</span>
+                <span class="cat-price">$5.00</span>
+            </div>
+            <div class="product-grid">
+                <div class="product-item selectable-item" data-name="Cuero Café" data-price="5.00" data-img="brown.png">
+                    <img src="brown.png" class="product-img" alt="Brown">
+                </div>
+                <div class="product-item selectable-item" data-name="Cuero Rojo" data-price="5.00" data-img="red.png">
+                    <img src="red.png" class="product-img" alt="Red">
+                </div>
+                <div class="product-item selectable-item" data-name="Cuero Azul Real" data-price="5.00" data-img="blue.png">
+                    <img src="blue.png" class="product-img" alt="Blue">
+                </div>
+                <div class="product-item selectable-item" data-name="Cuero Naranja" data-price="5.00" data-img="orange.png">
+                    <img src="orange.png" class="product-img" alt="Orange">
+                </div>
+            </div>
+
+            <div class="actions-area">
+                <button id="btnConfirmCollar" class="btn-continue">Siguiente: Personalizar Placa →</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2024 PAWI - Todos los derechos reservados.</p></footer>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>

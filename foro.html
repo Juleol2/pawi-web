@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Foro Comunitario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* NAVBAR */
+        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .nav-user-badge { background-color: #FFF0E6; color: #F37021; padding: 8px 20px; border-radius: 30px; font-weight: 700; font-size: 14px; }
+
+        /* LAYOUT */
+        .forum-container {
+            max-width: 1200px; margin: 30px auto; width: 100%; padding: 0 20px;
+            display: grid; grid-template-columns: 250px 1fr 300px; gap: 30px; align-items: start;
+        }
+
+        /* SIDEBAR LEFT */
+        .sidebar-left { background: transparent; }
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #666; text-decoration: none; font-weight: 600; border-radius: 15px; transition: 0.2s; }
+        .menu-item:hover, .menu-item.active { background-color: white; color: #F37021; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .menu-icon { font-size: 20px; width: 30px; text-align: center; }
+
+        /* FEED CENTER */
+        .feed-center { display: flex; flex-direction: column; gap: 20px; }
+
+        .create-post-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; align-items: center; }
+        .user-avatar { width: 50px; height: 50px; background-color: #1F2937; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; object-fit: cover; }
+        .post-input { flex: 1; background-color: #f4f6f8; border: none; padding: 15px; border-radius: 30px; outline: none; }
+
+        /* ESTILOS DE POST */
+        .post-card { background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; }
+        .post-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .post-author { font-weight: 700; color: #111; }
+        .post-time { font-size: 12px; color: #999; }
+        .post-content { padding: 0 20px 20px; color: #444; line-height: 1.5; }
+        .post-img { width: 100%; height: 350px; object-fit: cover; }
+        .post-actions { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 20px; color: #666; font-size: 14px; font-weight: 600; }
+
+        /* ESTILO ESPECIAL PARA ALERTA DE PÉRDIDA */
+        .alert-post { border: 2px solid #ef4444; } /* Borde rojo */
+        .alert-banner { background-color: #fef2f2; color: #dc2626; padding: 12px 20px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #fee2e2; }
+        .btn-action-alert { border: none; background: none; cursor: pointer; display: flex; gap: 5px; align-items: center; font-weight: 700; transition: 0.2s; }
+        .btn-action-alert:hover { transform: scale(1.05); }
+
+        /* SIDEBAR RIGHT (ADS) */
+        .sidebar-right { display: flex; flex-direction: column; gap: 20px; }
+        .ad-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .ad-header { font-size: 12px; font-weight: 700; color: #999; margin-bottom: 15px; text-transform: uppercase; }
+        .ad-item { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+        .ad-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background-color: #eee; }
+        .ad-info h4 { font-size: 14px; margin-bottom: 3px; }
+        .ad-info p { font-size: 11px; color: #666; line-height: 1.4; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="dashboard.html" class="nav-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Pawi</span>
+        </a>
+        <div class="nav-user-badge">
+            <span>👤 <span id="navUserName">Cargando...</span></span>
+        </div>
+    </nav>
+
+    <div class="forum-container">
+        
+        <div class="sidebar-left">
+            <a href="#" class="menu-item active"><span class="menu-icon">📰</span> Feed Principal</a>
+            <a href="mis_mascotas.html" class="menu-item"><span class="menu-icon">🐾</span> Mis Mascotas</a>
+            <a href="#" class="menu-item"><span class="menu-icon">📢</span> Alertas Activas</a>
+            <a href="#" class="menu-item"><span class="menu-icon">🔖</span> Guardados</a>
+            <a href="#" class="menu-item"><span class="menu-icon">🏥</span> Veterinarias</a>
+        </div>
+
+        <div class="feed-center">
+            
+            <div class="create-post-card">
+                <div class="user-avatar" id="forumUserInitials">?</div>
+                <input type="text" class="post-input" id="postInputPlaceholder" placeholder="¿Qué estás pensando?">
+            </div>
+
+            <div class="post-card alert-post">
+                <div class="post-header">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
+                    <div>
+                        <div class="post-author">Carlos Ruiz</div>
+                        <div class="post-time">Hace 45 min • Urdesa Central</div>
+                    </div>
+                </div>
+                
+                <div class="post-content">
+                    ¡Ayuda! Se perdió mi Bulldog Francés "Rocco". Es muy asustadizo. Si lo ven, por favor no intenten agarrarlo, llámenme inmediatamente. 🙏
+                </div>
+
+                <div class="alert-banner">
+                    📍 Visto por última vez: Sector Urdesa Central, cerca del banco.
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" class="post-img" alt="Perro Perdido">
+
+                <div class="post-actions" style="justify-content: space-around; background-color: #fef2f2;">
+                    <button class="btn-action-alert" style="color: #dc2626;">📞 Llamar</button>
+                    <button class="btn-action-alert" style="color: #4b5563;">💬 Tengo info</button>
+                    <button class="btn-action-alert" style="color: #0284c7;">📢 Difundir</button>
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
+                    <div>
+                        <div class="post-author">Ana López</div>
+                        <div class="post-time">Hace 2 horas • Guayaquil</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    ¡Disfrutando de un domingo soleado en el parque Samanes! A Max le encanta correr por aquí. 🌳☀️
+                </div>
+                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" class="post-img">
+                <div class="post-actions">
+                    <span>❤️ 45 Me gusta</span>
+                    <span>💬 12 Comentarios</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar-right">
+            <div class="ad-card">
+                <div class="ad-header">Publicidad Sugerida</div>
+                
+                <div class="ad-item">
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=200&q=80" class="ad-img">
+                    <div class="ad-info">
+                        <h4>VetCare 24/7</h4>
+                        <p>Chequeo general a mitad de precio.</p>
+                        <a href="#" style="font-size:10px; color:#F37021; font-weight:700;">veterinaria.com</a>
+                    </div>
+                </div>
+
+                <div class="ad-item">
+                    <img src="comida-casera-comer-perro.jpg" class="ad-img">
+                    <div class="ad-info">
+                        <h4>SuperCan Food</h4>
+                        <p>Alimento premium para tu mejor amigo.</p>
+                        <a href="#" style="font-size:10px; color:#F37021; font-weight:700;">supercan.ec</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ad-card">
+                <div class="ad-header">Páginas Sugeridas</div>
+                <div class="ad-item">
+                    <div class="user-avatar" style="width:40px; height:40px; background:#F37021; font-size:14px;">AG</div>
+                    <div class="ad-info">
+                        <h4>Adopta Gye</h4>
+                        <p>Refugio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

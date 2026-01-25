@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Generar Reporte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* NAVBAR (Igual al inicio) */
+        .navbar { background: white; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { width: 50px; height: auto; }
+        .logo-text-img { height: 35px; width: auto; display: block; }
+
+        /* FORMULARIO */
+        .report-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        h2 { text-align: center; color: #F37021; margin-bottom: 30px; font-weight: 800; font-size: 28px; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 10px; color: #1F2937; }
+
+        /* Selector de Color */
+        .color-options { display: flex; gap: 15px; justify-content: center; margin-bottom: 25px; }
+        .color-radio { display: none; }
+        .color-circle {
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            border: 3px solid transparent; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* Colores disponibles */
+        .c-orange { background-color: #F37021; }
+        .c-blue { background-color: #3B82F6; }
+        .c-pink { background-color: #EC4899; }
+        .c-green { background-color: #10B981; }
+        .c-red { background-color: #EF4444; }
+        .c-black { background-color: #333; }
+
+        /* Estado seleccionado */
+        .color-radio:checked + .color-circle { transform: scale(1.2); border-color: #333; }
+
+        /* Selector de Especie */
+        .species-options { display: flex; gap: 10px; margin-bottom: 25px; }
+        .species-radio { display: none; }
+        .species-btn {
+            flex: 1; padding: 10px; text-align: center; border: 2px solid #eee; border-radius: 10px;
+            cursor: pointer; font-weight: 600; color: #666; transition: 0.2s;
+        }
+        .species-radio:checked + .species-btn {
+            border-color: #F37021; background-color: #FFF0E6; color: #F37021;
+        }
+
+        /* Inputs normales */
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px;
+            font-size: 14px; resize: none; margin-bottom: 20px; outline: none;
+        }
+        textarea:focus { border-color: #F37021; }
+
+        /* Botón Ubicación */
+        .btn-location {
+            width: 100%; padding: 12px; border-radius: 50px; border: 2px dashed #F37021;
+            background: none; color: #F37021; font-weight: 700; cursor: pointer; margin-bottom: 25px;
+            transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-location:hover, .btn-location.active { background: #FFF0E6; }
+        .location-check { display: none; color: #10B981; font-size: 18px; }
+
+        /* Botón Enviar */
+        .btn-submit {
+            width: 100%; padding: 15px; background-color: #F37021; color: white; border: none;
+            border-radius: 50px; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-submit:hover { background-color: #d85c15; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(243, 112, 33, 0.3); }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .navbar { padding: 0 20px; height: 70px; }
+            .report-container { margin: 20px; padding: 20px; }
+            .color-options { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="logoImagen.PNG" alt="Logo" class="logo-img">
+            <img src="logoNombre.PNG" alt="Pawi" class="logo-text-img">
+        </a>
+    </nav>
+
+    <div class="report-container">
+        <h2>Reportar Avistamiento</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 14px;">
+            Ayúdanos a encontrar a su dueño. Llena los datos de la mascota que viste.
+        </p>
+
+        <form id="publicReportForm">
+            
+            <label class="form-label">Color de la placa/collar:</label>
+            <div class="color-options">
+                <label><input type="radio" name="tagColor" value="Naranja" class="color-radio" checked><div class="color-circle c-orange" title="Naranja PAWI"></div></label>
+                <label><input type="radio" name="tagColor" value="Azul" class="color-radio"><div class="color-circle c-blue" title="Azul"></div></label>
+                <label><input type="radio" name="tagColor" value="Rosado" class="color-radio"><div class="color-circle c-pink" title="Rosado"></div></label>
+                <label><input type="radio" name="tagColor" value="Rojo" class="color-radio"><div class="color-circle c-red" title="Rojo"></div></label>
+                <label><input type="radio" name="tagColor" value="Verde" class="color-radio"><div class="color-circle c-green" title="Verde"></div></label>
+                <label><input type="radio" name="tagColor" value="Negro" class="color-radio"><div class="color-circle c-black" title="Negro"></div></label>
+            </div>
+
+            <label class="form-label">Especie:</label>
+            <div class="species-options">
+                <label><input type="radio" name="species" value="Perro" class="species-radio" checked><div class="species-btn">🐶 Perro</div></label>
+                <label><input type="radio" name="species" value="Gato" class="species-radio"><div class="species-btn">🐱 Gato</div></label>
+                <label><input type="radio" name="species" value="Otro" class="species-radio"><div class="species-btn">🐰 Otro</div></label>
+            </div>
+
+            <label class="form-label">Descripción:</label>
+            <textarea id="reportDesc" rows="4" placeholder="Ej: Es mediano, tiene una mancha blanca en la pata, parece asustado..."></textarea>
+
+            <button type="button" id="btnGetLocation" class="btn-location">
+                <span>📍 Adjuntar ubicación actual</span>
+                <span class="location-check">✓</span>
+            </button>
+
+            <button type="submit" class="btn-submit">ENVIAR REPORTE</button>
+        </form>
+    </div>
+
+    <script type="module" src="main.js"></script>
+
+</body>
+</html>
