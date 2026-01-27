@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: #f4f6f8; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* NAVBAR */
+        /* NAVBAR (Igual al inicio) */
         .navbar { background: white; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .logo-img { width: 50px; height: auto; }
@@ -18,99 +18,74 @@
 
         /* FORMULARIO */
         .report-container {
-            max-width: 600px; margin: 40px auto; background: white; padding: 40px;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        /*  */
-        h2 { text-align: center; color: #F59E2D; margin-bottom: 30px; font-weight: 800; font-size: 28px; }
+        h2 { text-align: center; color: #F37021; margin-bottom: 30px; font-weight: 800; font-size: 28px; }
         .form-label { display: block; font-weight: 600; margin-bottom: 10px; color: #1F2937; }
 
-        /* --- COLORES DE LAS PLACAS (16 Opciones) --- */
-        .color-options { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+        /* Selector de Color */
+        .color-options { display: flex; gap: 15px; justify-content: center; margin-bottom: 25px; }
         .color-radio { display: none; }
         .color-circle {
             width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
             border: 3px solid transparent; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
-        /* Fila 1 */
-        .c-white   { background-color: #ffffff; border: 2px solid #ddd; }
-        .c-gray    { background-color: #9CA3AF; }
-        .c-brown   { background-color: #795548; }
-        .c-gold    { background-color: #D97706; } /* Dorado */
-        
-        /* Fila 2 */
-        .c-yellow  { background-color: #FACC15; border: 1px solid #e5e7eb; }
-        .c-orange  { background-color: #FF4500; } /* Naranja Placa (Rojizo fuerte) */
-        .c-red     { background-color: #EF4444; }
-        .c-maroon  { background-color: #991B1B; } /* Vino */
+        /* Colores disponibles */
+        .c-orange { background-color: #F37021; }
+        .c-blue { background-color: #3B82F6; }
+        .c-pink { background-color: #EC4899; }
+        .c-green { background-color: #10B981; }
+        .c-red { background-color: #EF4444; }
+        .c-black { background-color: #333; }
 
-        /* Fila 3 */
-        .c-lime    { background-color: #84CC16; }
-        .c-green   { background-color: #10B981; }
-        .c-cyan    { background-color: #06B6D4; }
-        .c-blue    { background-color: #3B82F6; }
-        .c-navy    { background-color: #1E3A8A; } /* Azul Marino */
-
-        /* Fila 4 */
-        .c-lilac   { background-color: #C084FC; }
-        .c-purple  { background-color: #9333EA; }
-        .c-pink    { background-color: #EC4899; }
-
+        /* Estado seleccionado */
         .color-radio:checked + .color-circle { transform: scale(1.2); border-color: #333; }
 
-
-        /* --- ESPECIE --- */
+        /* Selector de Especie */
         .species-options { display: flex; gap: 10px; margin-bottom: 25px; }
         .species-radio { display: none; }
         .species-btn {
             flex: 1; padding: 10px; text-align: center; border: 2px solid #eee; border-radius: 10px;
             cursor: pointer; font-weight: 600; color: #666; transition: 0.2s;
         }
-        /* Color de selección usando tu marca */
         .species-radio:checked + .species-btn {
-            border-color: #F59E2D; background-color: #FFF8F0; color: #F59E2D;
+            border-color: #F37021; background-color: #FFF0E6; color: #F37021;
         }
 
-        /* --- INPUTS --- */
-        textarea, input[type="text"], input[type="file"] {
+        /* Inputs normales */
+        textarea {
             width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px;
-            font-size: 14px; margin-bottom: 20px; outline: none;
+            font-size: 14px; resize: none; margin-bottom: 20px; outline: none;
         }
-        textarea:focus, input:focus { border-color: #F59E2D; }
+        textarea:focus { border-color: #F37021; }
 
-        .file-upload-label {
-            display: block; padding: 10px; background: #f9f9f9; border: 2px dashed #ccc;
-            border-radius: 10px; text-align: center; cursor: pointer; margin-bottom: 25px; color: #666;
-        }
-        .file-upload-label:hover { background: #eee; }
-
-        /* BOTONES CON TU COLOR DE MARCA (#F59E2D) */
+        /* Botón Ubicación */
         .btn-location {
-            width: 100%; padding: 12px; border-radius: 50px; 
-            border: 2px dashed #F59E2D; /* Borde marca */
-            background: none; 
-            color: #F59E2D; /* Texto marca */
-            font-weight: 700; cursor: pointer; margin-bottom: 25px;
+            width: 100%; padding: 12px; border-radius: 50px; border: 2px dashed #F37021;
+            background: none; color: #F37021; font-weight: 700; cursor: pointer; margin-bottom: 25px;
             transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-location:hover, .btn-location.active { background: #FFF8F0; }
-        
+        .btn-location:hover, .btn-location.active { background: #FFF0E6; }
+        .location-check { display: none; color: #10B981; font-size: 18px; }
+
+        /* Botón Enviar */
         .btn-submit {
-            width: 100%; padding: 15px; 
-            background-color: #F59E2D; /* Fondo marca */
-            color: white; border: none;
+            width: 100%; padding: 15px; background-color: #F37021; color: white; border: none;
             border-radius: 50px; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s;
         }
-        .btn-submit:hover { 
-            background-color: #d68015; 
-            transform: translateY(-2px); 
-        }
+        .btn-submit:hover { background-color: #d85c15; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(243, 112, 33, 0.3); }
 
+        /* Responsive */
         @media (max-width: 600px) {
             .navbar { padding: 0 20px; height: 70px; }
             .report-container { margin: 20px; padding: 20px; }
+            .color-options { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -131,27 +106,14 @@
 
         <form id="publicReportForm">
             
-            <label class="form-label">Color de la placa:</label>
+            <label class="form-label">Color de la placa/collar:</label>
             <div class="color-options">
-                <label><input type="radio" name="tagColor" value="Blanco" class="color-radio"><div class="color-circle c-white" title="Blanco"></div></label>
-                <label><input type="radio" name="tagColor" value="Gris" class="color-radio"><div class="color-circle c-gray" title="Gris"></div></label>
-                <label><input type="radio" name="tagColor" value="Cafe" class="color-radio"><div class="color-circle c-brown" title="Café"></div></label>
-                <label><input type="radio" name="tagColor" value="Dorado" class="color-radio"><div class="color-circle c-gold" title="Dorado/Mostaza"></div></label>
-                
-                <label><input type="radio" name="tagColor" value="Amarillo" class="color-radio"><div class="color-circle c-yellow" title="Amarillo"></div></label>
-                <label><input type="radio" name="tagColor" value="Naranja" class="color-radio" checked><div class="color-circle c-orange" title="Naranja Placa"></div></label>
-                <label><input type="radio" name="tagColor" value="Rojo" class="color-radio"><div class="color-circle c-red" title="Rojo"></div></label>
-                <label><input type="radio" name="tagColor" value="Vino" class="color-radio"><div class="color-circle c-maroon" title="Vino"></div></label>
-
-                <label><input type="radio" name="tagColor" value="Lima" class="color-radio"><div class="color-circle c-lime" title="Verde Lima"></div></label>
-                <label><input type="radio" name="tagColor" value="Verde" class="color-radio"><div class="color-circle c-green" title="Verde"></div></label>
-                <label><input type="radio" name="tagColor" value="Turquesa" class="color-radio"><div class="color-circle c-cyan" title="Turquesa"></div></label>
+                <label><input type="radio" name="tagColor" value="Naranja" class="color-radio" checked><div class="color-circle c-orange" title="Naranja PAWI"></div></label>
                 <label><input type="radio" name="tagColor" value="Azul" class="color-radio"><div class="color-circle c-blue" title="Azul"></div></label>
-                <label><input type="radio" name="tagColor" value="Marino" class="color-radio"><div class="color-circle c-navy" title="Azul Marino"></div></label>
-
-                <label><input type="radio" name="tagColor" value="Lila" class="color-radio"><div class="color-circle c-lilac" title="Lila"></div></label>
-                <label><input type="radio" name="tagColor" value="Morado" class="color-radio"><div class="color-circle c-purple" title="Morado"></div></label>
                 <label><input type="radio" name="tagColor" value="Rosado" class="color-radio"><div class="color-circle c-pink" title="Rosado"></div></label>
+                <label><input type="radio" name="tagColor" value="Rojo" class="color-radio"><div class="color-circle c-red" title="Rojo"></div></label>
+                <label><input type="radio" name="tagColor" value="Verde" class="color-radio"><div class="color-circle c-green" title="Verde"></div></label>
+                <label><input type="radio" name="tagColor" value="Negro" class="color-radio"><div class="color-circle c-black" title="Negro"></div></label>
             </div>
 
             <label class="form-label">Especie:</label>
@@ -161,15 +123,12 @@
                 <label><input type="radio" name="species" value="Otro" class="species-radio"><div class="species-btn">🐰 Otro</div></label>
             </div>
 
-            <label class="form-label">Foto (Opcional pero muy útil):</label>
-            <input type="file" id="reportPhoto" accept="image/*" class="file-upload-label">
-
             <label class="form-label">Descripción:</label>
             <textarea id="reportDesc" rows="4" placeholder="Ej: Es mediano, tiene una mancha blanca en la pata, parece asustado..."></textarea>
 
             <button type="button" id="btnGetLocation" class="btn-location">
                 <span>📍 Adjuntar ubicación actual</span>
-                <span class="location-check"></span>
+                <span class="location-check">✓</span>
             </button>
 
             <button type="submit" class="btn-submit">ENVIAR REPORTE</button>

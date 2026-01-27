@@ -30,7 +30,7 @@
 
         /* --- CONTENEDOR PRINCIPAL --- */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             padding: 0 20px 40px 20px;
@@ -50,12 +50,10 @@
             border: 1px solid #eee;
         }
 
-        /* Área del Iframe */
         .map-wrapper {
             width: 100%;
-            height: 500px; /* Altura del mapa */
+            height: 550px; /* Un poco más alto para ver mejor */
             background-color: #e5e7eb;
-            position: relative;
         }
         .map-wrapper iframe {
             width: 100%;
@@ -65,57 +63,63 @@
 
         /* --- LEYENDA --- */
         .legend-section {
-            padding: 25px;
-            border-top: 1px solid #eee;
+            padding: 30px;
             background-color: #fff;
+            border-top: 1px solid #eee;
         }
 
         .legend-title {
             font-size: 14px; font-weight: 700; color: #9ca3af; 
-            text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px;
+            border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;
         }
 
         .legend-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Auto-ajustable */
+            gap: 15px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-radius: 12px;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
             background-color: #f9fafb;
             border: 1px solid #eee;
-            transition: transform 0.2s;
+            transition: 0.2s;
         }
-        .legend-item:hover { transform: translateY(-2px); border-color: #F59E2D; }
+        .legend-item:hover { background-color: #fff; border-color: #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
-        /* Círculos de color */
         .color-dot {
-            width: 20px; height: 20px; border-radius: 50%;
+            width: 16px; height: 16px; border-radius: 4px; /* Cuadrado redondeado como MyMaps */
             flex-shrink: 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            border: 2px solid white;
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
-        /* Definición de colores para coincidir con el mapa */
-        .bg-orange { background-color: #F59E2D; }
-        .bg-blue { background-color: #1e40af; }
-        .bg-green { background-color: #10b981; }
+        .legend-text { font-size: 13px; font-weight: 600; color: #444; }
 
-        .legend-info h4 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 2px; }
-        .legend-info p { font-size: 12px; color: #666; margin: 0; }
+        /* COLORES EXACTOS DE TU IMAGEN */
+        .c-febres { background-color: #FDBD2F; } /* Amarillo/Naranja */
+        .c-pascuales { background-color: #C81D48; } /* Rojo oscuro/Vino */
+        .c-tarqui { background-color: #F48020; } /* Naranja fuerte */
+        .c-ximena { background-color: #7CB342; } /* Verde claro */
+        .c-chongon { background-color: #D32F2F; } /* Rojo */
+        .c-letamendi { background-color: #009688; } /* Verde azulado */
+        .c-garcia { background-color: #039BE5; } /* Azul claro */
+        .c-urdaneta { background-color: #3F51B5; } /* Azul */
+        .c-sucre { background-color: #5C6BC0; } /* Azul índigo */
+        .c-9oct { background-color: #AB47BC; } /* Morado */
+        .c-ayacucho { background-color: #BDBDBD; } /* Gris */
+        .c-bolivar { background-color: #4DD0E1; } /* Cyan */
+        .c-olmedo { background-color: #424242; } /* Gris oscuro */
+        .c-rocafuerte { background-color: #CE93D8; } /* Lila claro */
+        .c-roca { background-color: #8D6E63; } /* Café */
+        .c-carbo { background-color: #A1887F; } /* Café claro */
 
         /* FOOTER */
         .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; margin-top: auto; }
-
-        @media (max-width: 768px) {
-            .map-wrapper { height: 350px; }
-            .legend-grid { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -132,8 +136,8 @@
 
     <div class="container">
         <div class="header-section">
-            <h1>Zonas Seguras</h1>
-            <p>Visualiza las áreas verificadas y niveles de seguridad en tu sector.</p>
+            <h1>Zonas Seguras y Parroquias</h1>
+            <p>Mapa detallado de las parroquias urbanas de Guayaquil.</p>
         </div>
 
         <div class="map-card">
@@ -146,32 +150,28 @@
             </div>
 
             <div class="legend-section">
-                <div class="legend-title">Leyenda de Colores</div>
+                <div class="legend-title">Leyenda de Parroquias</div>
                 
                 <div class="legend-grid">
-                    <div class="legend-item">
-                        <div class="color-dot bg-orange"></div>
-                        <div class="legend-info">
-                            <h4>Parroquia Febres Cordero</h4>
-                            <p>Zona monitoreada por la comunidad.</p>
-                        </div>
-                    </div>
+                    <div class="legend-item"><div class="color-dot c-febres"></div><span class="legend-text">Febres Cordero</span></div>
+                    <div class="legend-item"><div class="color-dot c-tarqui"></div><span class="legend-text">Tarqui</span></div>
+                    <div class="legend-item"><div class="color-dot c-ximena"></div><span class="legend-text">Ximena</span></div>
+                    <div class="legend-item"><div class="color-dot c-pascuales"></div><span class="legend-text">Pascuales</span></div>
+                    
+                    <div class="legend-item"><div class="color-dot c-chongon"></div><span class="legend-text">Chongón</span></div>
+                    <div class="legend-item"><div class="color-dot c-letamendi"></div><span class="legend-text">Letamendi</span></div>
+                    <div class="legend-item"><div class="color-dot c-garcia"></div><span class="legend-text">García Moreno</span></div>
+                    <div class="legend-item"><div class="color-dot c-urdaneta"></div><span class="legend-text">Urdaneta</span></div>
 
-                    <div class="legend-item">
-                        <div class="color-dot bg-blue"></div>
-                        <div class="legend-info">
-                            <h4>Parroquia Tarqui</h4>
-                            <p>Reportes frecuentes de mascotas.</p>
-                        </div>
-                    </div>
+                    <div class="legend-item"><div class="color-dot c-sucre"></div><span class="legend-text">Sucre</span></div>
+                    <div class="legend-item"><div class="color-dot c-9oct"></div><span class="legend-text">9 de Octubre</span></div>
+                    <div class="legend-item"><div class="color-dot c-ayacucho"></div><span class="legend-text">Ayacucho</span></div>
+                    <div class="legend-item"><div class="color-dot c-bolivar"></div><span class="legend-text">Bolívar-Sagrario</span></div>
 
-                    <div class="legend-item">
-                        <div class="color-dot bg-green"></div>
-                        <div class="legend-info">
-                            <h4>Zonas de Parques Seguros</h4>
-                            <p>Áreas verdes cerradas y seguras.</p>
-                        </div>
-                    </div>
+                    <div class="legend-item"><div class="color-dot c-olmedo"></div><span class="legend-text">Olmedo-San Alejo</span></div>
+                    <div class="legend-item"><div class="color-dot c-rocafuerte"></div><span class="legend-text">Rocafuerte</span></div>
+                    <div class="legend-item"><div class="color-dot c-roca"></div><span class="legend-text">Roca</span></div>
+                    <div class="legend-item"><div class="color-dot c-carbo"></div><span class="legend-text">Carbo-Concepción</span></div>
                 </div>
             </div>
         </div>

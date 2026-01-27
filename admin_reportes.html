@@ -8,24 +8,66 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f4f6f8; padding: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .report-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #F37021; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;}
-        .report-info h3 { margin: 0 0 5px 0; color: #333; }
+        
+        .report-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            border-left: 5px solid #F37021; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .report-info h3 { margin: 0 0 5px 0; color: #333; font-size: 16px; }
         .report-info p { margin: 2px 0; color: #666; font-size: 14px; }
-        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; }
-        .bg-orange { background: #F37021; } .bg-blue { background: #3B82F6; }
-        .btn-map { background: #1F2937; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-size: 14px; }
-        .btn-delete { background: #EF4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-left: 10px;}
+        
+        .badge-color {
+            display: inline-block;
+            width: 10px; height: 10px; 
+            border-radius: 50%; 
+            margin-right: 5px;
+        }
+
+        .actions { display: flex; gap: 10px; }
+
+        .btn-map { 
+            background: #1F2937; 
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            font-size: 13px; 
+            display: flex; align-items: center; gap: 5px;
+        }
+        
+        .btn-delete { 
+            background: #EF4444; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .report-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .actions { width: 100%; justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
 
     <div class="admin-header">
         <h1>👮 Panel de Reportes Ciudadanos</h1>
-        <a href="index.html" style="color:#F37021; text-decoration:none;">← Volver</a>
+        <a href="index.html" style="color:#F37021; text-decoration:none; font-weight: 600;">← Volver al Inicio</a>
     </div>
 
     <div id="adminReportsList">
-        <p>Cargando reportes...</p>
+        <p style="text-align: center; color: #666;">Cargando reportes en tiempo real...</p>
     </div>
 
     <script type="module">
@@ -34,49 +76,97 @@
 
         async function loadReports() {
             const list = document.getElementById('adminReportsList');
-            const q = query(collection(db, "general_reports"), orderBy("timestamp", "desc"));
-            const snap = await getDocs(q);
+            
+            // 1. Buscamos en la colección "alerts" donde guardamos todo en main.js
+            const q = query(collection(db, "alerts"), orderBy("timestamp", "desc"));
+            
+            try {
+                const snap = await getDocs(q);
 
-            list.innerHTML = "";
-            if (snap.empty) {
-                list.innerHTML = "<p>No hay reportes nuevos.</p>";
-                return;
+                list.innerHTML = "";
+                if (snap.empty) {
+                    list.innerHTML = "<p style='text-align:center;'>No hay reportes activos en el sistema.</p>";
+                    return;
+                }
+
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    
+                    // --- NORMALIZACIÓN DE DATOS ---
+                    // Determinamos coordenadas (ya sea de 'gps' o 'location')
+                    const lat = data.gps?.lat || data.location?.lat || 0;
+                    const lng = data.gps?.lng || data.location?.lng || 0;
+                    const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+
+                    // Determinamos Color y Nombre
+                    const colorName = data.placaColor || 'Desconocido';
+                    const colorHex = getColorHex(colorName);
+                    const titulo = data.petName || "Reporte Sin Nombre";
+                    
+                    // Descripción y Fecha
+                    const desc = data.content || data.extraInfo || data.description || "Sin descripción adicional.";
+                    
+                    // Manejo seguro de fecha (String ISO o Timestamp de Firebase)
+                    let fechaStr = "Reciente";
+                    if (data.timestamp) {
+                        if (typeof data.timestamp === 'string') {
+                            fechaStr = new Date(data.timestamp).toLocaleString();
+                        } else if (data.timestamp.seconds) {
+                            fechaStr = new Date(data.timestamp.seconds * 1000).toLocaleString();
+                        }
+                    }
+
+                    // --- GENERAR HTML ---
+                    list.innerHTML += `
+                        <div class="report-card">
+                            <div class="report-info">
+                                <h3>
+                                    ${titulo} 
+                                    ${data.placaColor ? `<span style="font-weight:400; font-size: 14px; margin-left:5px; color: #555;"> • Placa <span class="badge-color" style="background-color:${colorHex};"></span> <span style="color:${colorHex}; font-weight:700;">${colorName}</span></span>` : ''}
+                                </h3>
+                                <p><strong>Detalle:</strong> ${desc}</p>
+                                <p style="font-size: 12px; color: #999; margin-top: 5px;">📅 ${fechaStr}</p>
+                            </div>
+                            <div class="actions">
+                                <a href="${mapUrl}" target="_blank" class="btn-map">Ver Mapa 📍</a>
+                                <button onclick="borrarReporte('${docSnap.id}')" class="btn-delete">Borrar</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (error) {
+                console.error(error);
+                list.innerHTML = "<p style='color:red; text-align:center;'>Error al cargar datos. Revisa la consola.</p>";
             }
-
-            snap.forEach(docSnap => {
-                const data = docSnap.data();
-                const fecha = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : 'Reciente';
-
-                list.innerHTML += `
-                    <div class="report-card">
-                        <div class="report-info">
-                            <h3>${data.species} - Placa <span style="color:${getColorHex(data.tagColor)}">● ${data.tagColor}</span></h3>
-                            <p><strong>Descripción:</strong> ${data.description}</p>
-                            <p>🕒 ${fecha}</p>
-                        </div>
-                        <div class="actions">
-                            <a href="${data.mapsLink}" target="_blank" class="btn-map">Ver Mapa 📍</a>
-                            <button onclick="borrarReporte('${docSnap.id}')" class="btn-delete">Borrar</button>
-                        </div>
-                    </div>
-                `;
-            });
         }
 
-        // Función auxiliar para colores
+        // Función de colores
         function getColorHex(name) {
-            const colors = { 'Naranja':'#F37021', 'Azul':'#3B82F6', 'Rojo':'#EF4444', 'Verde':'#10B981', 'Negro':'#000', 'Rosado':'#EC4899' };
-            return colors[name] || '#999';
+            const map = { 
+                'Naranja': '#F37021', 
+                'Azul': '#3B82F6', 
+                'Rojo': '#EF4444', 
+                'Verde': '#10B981', 
+                'Negro': '#111827', 
+                'Rosado': '#EC4899' 
+            };
+            return map[name] || '#9CA3AF'; // Gris por defecto
         }
 
-        // Hacer la función de borrar global
+        // Función Global de Borrado
         window.borrarReporte = async (id) => {
-            if(confirm("¿Ya gestionaste este reporte? Se eliminará de la lista.")) {
-                await deleteDoc(doc(db, "general_reports", id));
-                loadReports();
+            if(confirm("¿Estás seguro de eliminar este reporte permanentemente?")) {
+                try {
+                    await deleteDoc(doc(db, "alerts", id));
+                    loadReports(); // Recargar lista sin F5
+                } catch (e) {
+                    alert("Error al borrar.");
+                }
             }
         }
 
+        // Iniciar carga
         loadReports();
     </script>
 </body>
