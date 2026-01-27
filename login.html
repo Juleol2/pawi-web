@@ -30,42 +30,50 @@
         }
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .logo-img { width: 50px; height: auto; }
-        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .logo-text-img { height: 35px; width: auto; display: block; }
+
         .nav-links { display: flex; align-items: center; gap: 20px; }
         .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
-        .nav-link:hover { color: #F37021; }
-        .btn-report { background-color: #F37021; color: white; padding: 12px 25px; border-radius: 30px; font-weight: 700; text-decoration: none; transition: transform 0.2s; }
-        .btn-report:hover { transform: scale(1.05); background-color: #d85c15; }
+        .nav-link:hover { color: #F59E2D; }
+        
+        .btn-report { 
+            background-color: #F59E2D; 
+            color: white; padding: 12px 25px; border-radius: 30px; 
+            font-weight: 700; text-decoration: none; transition: transform 0.2s; 
+        }
+        .btn-report:hover { transform: scale(1.05); background-color: #d68015; }
 
-        /* --- LOGIN CARD --- */
+        /* --- LOGIN CARD WRAPPER --- */
         .login-wrapper {
-            flex: 1;
+            min-height: calc(100vh - 90px); 
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
+            align-items: center; 
+            padding: 20px;
         }
 
         .login-card {
             background-color: white;
             width: 100%;
-            max-width: 900px;
-            height: 550px;
-            border-radius: 30px;
+            max-width: 750px; 
+            height: 450px; 
+            border-radius: 25px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
             display: flex;
         }
 
+        /* LADO IZQUIERDO (VISUAL) */
         .login-visual {
             flex: 1;
-            background-color: #F37021;
+            background-color: #F59E2D;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: white;
             position: relative;
+            gap: 10px;
         }
 
         .login-visual::before {
@@ -75,56 +83,75 @@
             opacity: 0.1;
         }
 
-        .visual-logo { width: 100px; height: auto; margin-bottom: 20px; filter: brightness(0) invert(1); z-index: 2; }
-        .visual-text { font-size: 32px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; z-index: 2; }
+        .visual-logo { width: 90px; height: auto; filter: brightness(0) invert(1); z-index: 2; }
+        .visual-text-img { height: 35px; width: auto; filter: brightness(0) invert(1); z-index: 2; }
 
+        /* LADO DERECHO (FORMULARIO) */
         .login-form-container {
-            flex: 1;
-            padding: 50px;
+            flex: 1.2;
+            padding: 30px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .login-title { font-size: 28px; font-weight: 800; color: #111; margin-bottom: 10px; }
-        .login-subtitle { font-size: 14px; color: #888; margin-bottom: 30px; }
+        .login-title { font-size: 24px; font-weight: 800; color: #111; margin-bottom: 5px; }
+        .login-subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
 
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
         .form-input {
-            width: 100%; padding: 15px; background-color: #f0f2f5;
-            border: 1px solid transparent; border-radius: 12px;
-            font-size: 15px; color: #333; outline: none; transition: 0.3s;
+            width: 100%; padding: 12px; background-color: #f0f2f5;
+            border: 1px solid transparent; border-radius: 10px;
+            font-size: 14px; color: #333; outline: none; transition: 0.3s;
         }
-        .form-input:focus { background-color: #fff; border-color: #F37021; box-shadow: 0 0 0 4px rgba(243, 112, 33, 0.1); }
+        .form-input:focus { 
+            background-color: #fff; 
+            border-color: #F59E2D; 
+            box-shadow: 0 0 0 4px rgba(245, 158, 45, 0.1); 
+        }
 
         .btn-submit {
-            width: 100%; background-color: #1F2937; color: white; padding: 15px;
-            border: none; border-radius: 12px; font-size: 16px; font-weight: 600;
-            cursor: pointer; margin-top: 10px; margin-bottom: 20px; transition: 0.2s;
+            width: 100%; 
+            background-color: #F59E2D; 
+            color: white; padding: 12px;
+            border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+            cursor: pointer; margin-top: 5px; margin-bottom: 15px; transition: 0.2s;
         }
-        .btn-submit:hover { background-color: #000; }
+        .btn-submit:hover { background-color: #d68015; transform: translateY(-2px); }
 
-        .form-footer { display: flex; justify-content: space-between; font-size: 13px; color: #666; }
+        .form-footer { display: flex; justify-content: space-between; font-size: 12px; color: #666; }
         .form-footer a { text-decoration: none; color: inherit; transition: color 0.2s; }
-        .form-footer a:hover { color: #F37021; text-decoration: underline; }
+        .form-footer a:hover { color: #F59E2D; text-decoration: underline; }
 
-        .footer { background-color: #1F2937; color: white; padding: 40px 20px; text-align: center; }
-        .footer-address { font-size: 18px; font-weight: 600; }
-        .footer-contact { font-size: 16px; color: #ccc; }
+        /* FOOTER */
+        .footer { background-color: #1F2937; color: white; padding: 20px 20px; text-align: center; }
+        .footer-address { font-size: 14px; font-weight: 600; }
+        .footer-contact { font-size: 13px; color: #ccc; }
+        
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; height: auto; flex-direction: column; padding-bottom: 15px;}
+            .nav-links { gap: 10px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
+            .login-card { flex-direction: column; height: auto; max-width: 400px; }
+            .login-visual { padding: 30px; display: none; }
+            .login-form-container { padding: 30px; }
+            .login-wrapper { min-height: auto; padding: 40px 20px; }
+        }
+
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <a href="index.html" class="nav-logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
-            <span class="logo-text">Pawi</span>
+            <img src="logoImagen.PNG" alt="Logo" class="logo-img">
+            <img src="logoNombre.PNG" alt="PAWI" class="logo-text-img">
         </a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Inicio</a>
             <a href="quienes_somos.html" class="nav-link">Quiénes somos</a>
-            <a href="#" class="btn-report">Generar reporte</a>
+            <a href="reporte.html" class="btn-report">Generar reporte</a>
             <a href="signup.html" class="nav-link">Registrarse</a>
         </div>
     </nav>
@@ -132,12 +159,12 @@
     <div class="login-wrapper">
         <div class="login-card">
             <div class="login-visual">
-                <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo Pawi" class="visual-logo">
-                <div class="visual-text">PAWI</div>
+                <img src="logoImagen.PNG" alt="Logo Pawi" class="visual-logo">
+                <img src="logoNombre.PNG" alt="PAWI" class="visual-text-img">
             </div>
 
             <div class="login-form-container">
-                <h2 class="login-title">Bienvenido!</h2>
+                <h2 class="login-title">¡Bienvenido!</h2>
                 <p class="login-subtitle">Ingresa tus datos para continuar.</p>
 
                 <form id="loginForm">
@@ -154,8 +181,9 @@
                     <button type="submit" class="btn-submit">Iniciar Sesión</button>
 
                     <div class="form-footer">
-    <a href="olvide_contrasena.html">¿Olvidaste tu contraseña?</a> <a href="signup.html">Crear cuenta nueva</a>
-</div>
+                        <a href="olvide_contrasena.html">¿Olvidaste tu contraseña?</a> 
+                        <a href="signup.html">Crear cuenta nueva</a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -164,11 +192,12 @@
     <footer class="footer">
         <div class="footer-content">
             <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
-            <p class="footer-contact">📞 Contacto: 093918273</p>
-            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2024 PAWI - Todos los derechos reservados.</p>
+            <p class="footer-contact">📞 Contacto: 0993919389</p>
+            <p style="font-size: 12px; margin-top: 10px; color: #888;">© 2025 PAWI - Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <script type="module" src="main.js"></script>
+    
 </body>
 </html>

@@ -12,33 +12,63 @@
         /* NAVBAR */
         .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        
+        /* Logos actualizados */
         .logo-img { width: 50px; height: auto; }
-        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
+        .logo-text-img { height: 35px; width: auto; display: block; }
 
         /* CARD */
         .wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .card { background-color: white; width: 100%; max-width: 500px; padding: 50px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; }
+        
+        .card { 
+            background-color: white; 
+            width: 100%; max-width: 500px; 
+            padding: 50px; 
+            border-radius: 25px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
         
         .title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #111; }
-        .subtitle { font-size: 14px; color: #666; margin-bottom: 30px; }
+        .subtitle { font-size: 14px; color: #888; margin-bottom: 30px; line-height: 1.5; }
 
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; margin-bottom: 8px; text-transform: uppercase; }
-        .form-input { width: 100%; padding: 15px; background-color: #f0f2f5; border: 1px solid transparent; border-radius: 12px; font-size: 15px; outline: none; }
-        .form-input:focus { background-color: #fff; border-color: #F37021; }
+        .form-label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .form-input { 
+            width: 100%; padding: 12px 15px; 
+            background-color: #f0f2f5; 
+            border: 1px solid transparent; 
+            border-radius: 10px; 
+            font-size: 14px; color: #333; outline: none; transition: 0.3s; 
+        }
+        
+        /* Foco con el color de marca #F59E2D */
+        .form-input:focus { 
+            background-color: #fff; 
+            border-color: #F59E2D; 
+            box-shadow: 0 0 0 4px rgba(245, 158, 45, 0.1); 
+        }
 
-        .btn-submit { width: 100%; background-color: #F37021; color: white; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-submit:hover { background-color: #d85c15; }
+        .btn-submit { 
+            width: 100%; 
+            background-color: #F59E2D; /* Color Marca */
+            color: white; padding: 15px; 
+            border: none; border-radius: 10px; 
+            font-size: 16px; font-weight: 700; 
+            cursor: pointer; transition: 0.2s; margin-top: 10px;
+        }
+        .btn-submit:hover { background-color: #d68015; transform: translateY(-2px); }
 
-        .back-link { display: block; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; font-weight: 600; }
-        .back-link:hover { color: #F37021; }
+        .back-link { display: block; margin-top: 25px; color: #666; text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+        .back-link:hover { color: #F59E2D; text-decoration: underline; }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <a href="index.html" class="nav-logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
-            <span class="logo-text">Pawi</span>
+            <img src="logoImagen.PNG" alt="Logo" class="logo-img">
+            <img src="logoNombre.PNG" alt="PAWI" class="logo-text-img">
         </a>
     </nav>
 

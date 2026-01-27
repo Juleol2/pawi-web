@@ -9,142 +9,164 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
 
-        /* NAVBAR */
-        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff; height: 80px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+        }
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .logo-img { width: 50px; height: auto; }
-        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
-        .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-link { text-decoration: none; color: #333; font-weight: 600; }
+        .logo-img { height: 45px; width: auto; } 
+        .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
 
-        /* CONTENEDOR GRID */
-        .container { flex: 1; padding: 40px 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .page-title { font-size: 32px; font-weight: 800; color: #111; margin-bottom: 30px; text-align: center; }
-
-        .pets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-user-badge {
+            display: flex; align-items: center; gap: 8px; background-color: #FFF0E6; padding: 8px 15px; border-radius: 30px;
+            color: #F59E2D; font-weight: 700; font-size: 14px;
+        }
+        
+        .nav-icon-btn {
+            font-size: 22px; text-decoration: none; color: #555; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8; transition: 0.2s;
+        }
+        .nav-icon-btn:hover { background-color: #FFF0E6; color: #F59E2D; }
+        .alert-btn { color: #dc2626; background-color: #fef2f2; animation: pulse-red 2s infinite; }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
         }
 
-        /* TARJETA DE MASCOTA */
+        /* --- CONTENIDO --- */
+        .container { flex: 1; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; margin-bottom: 120px; }
+        .page-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #1F2937; }
+        .pets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; justify-content: center; }
+
         .pet-card {
-            background: white; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: transform 0.3s;
-            display: flex; flex-direction: column;
+            background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; border: 1px solid #f0f0f0; max-width: 320px; margin: 0 auto;
         }
-        .pet-card:hover { transform: translateY(-5px); }
-        
-        .pet-img-area { height: 200px; background-color: #ddd; overflow: hidden; }
-        .pet-img-area img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .pet-info { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-        .pet-name { font-size: 22px; font-weight: 700; color: #F37021; margin-bottom: 5px; }
-        .pet-age { font-size: 14px; color: #888; margin-bottom: 15px; font-weight: 600; }
-        .pet-desc { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 20px; flex: 1; }
-
-        .card-actions { display: flex; gap: 10px; }
-        .btn-card { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-edit { background-color: #1F2937; color: white; }
-        .btn-edit:hover { background-color: #000; }
-        .btn-delete { background-color: #fee2e2; color: #dc2626; }
-        .btn-delete:hover { background-color: #fecaca; }
-
-        /* --- MODAL DE EDICIÓN (Oculto por defecto) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); z-index: 1000;
-            display: none; /* Oculto */
-            justify-content: center; align-items: center;
+        .pet-photo-header {
+            height: 180px; background-color: #ffffff; display: flex; justify-content: center; align-items: center; overflow: hidden; padding: 10px;
         }
-        .modal-overlay.active { display: flex; }
+        .pet-photo-header img { width: 100%; height: 100%; object-fit: contain; }
+        .pet-body { padding: 12px 15px; flex-grow: 1; text-align: center; }
+        .pet-name { font-size: 18px; font-weight: 800; color: #F59E2D; }
+        .pet-age { font-size: 12px; font-weight: 600; color: #9ca3af; margin-bottom: 5px; }
+        .pet-desc { font-size: 11px; color: #666; line-height: 1.3; margin-bottom: 10px; }
+        .qr-wrapper { text-align: center; padding: 8px; background: #fdfdfd; border-top: 1px dashed #eee; }
+        .qr-code { width: 60px; height: 60px; }
+        .card-actions { display: flex; padding: 10px 15px 15px; gap: 8px; }
+        .btn-pet { flex: 1; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-edit { background: #f4f6f8; color: #555; }
+        .btn-delete { background: #fef2f2; color: #dc2626; }
 
-        .modal-box {
-            background: white; padding: 40px; border-radius: 20px; width: 90%; max-width: 500px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-        }
-        .modal-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; margin-bottom: 5px; text-transform: uppercase; }
-        .form-input, textarea.form-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-save { background-color: #F37021; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; flex: 1; }
-        .btn-cancel { background-color: #eee; color: #333; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; flex: 1; }
-
-        /* ... Tus estilos anteriores ... */
-
-/* Estilos para el QR dentro de la tarjeta */
-.qr-area {
-    text-align: center;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed #eee;
-}
-
-.qr-img {
-    width: 100px;
-    height: 100px;
-    border: 5px solid white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-radius: 10px;
-}
-
-.qr-label {
-    font-size: 10px;
-    color: #999;
-    margin-top: 5px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
+        .footer { background-color: #1F2937; color: white; padding: 30px; text-align: center; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="dashboard.html" class="nav-logo"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img"><span class="logo-text">Pawi</span></a>
-        <div class="nav-links"><a href="dashboard.html" class="nav-link">← Volver al Dashboard</a></div>
+        <a href="dashboard.html" class="nav-logo">
+            <img src="logoImagen.png" alt="Logo" class="logo-img">
+            <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
+        </a>
+        <div class="nav-right">
+            <a href="generar_alerta.html" class="nav-icon-btn alert-btn">🚨</a>
+            <div class="nav-user-badge"><span>👤 <span id="displayUserName">Usuario</span></span></div>
+            <a href="dashboard.html" class="nav-icon-btn back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </a>
+        </div>
     </nav>
 
     <div class="container">
         <h1 class="page-title">Mis Mascotas Registradas</h1>
-        
-        <div class="pets-grid" id="petsGrid">
-            <p>Cargando tus mascotas...</p>
-        </div>
+        <div class="pets-grid" id="petsContainer">
+            </div>
     </div>
 
-    <div class="modal-overlay" id="editModal">
-        <div class="modal-box">
-            <h2 class="modal-title">Editar Mascota</h2>
-            <form id="editPetForm">
-                <input type="hidden" id="editPetId"> <div class="form-group">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" id="editName" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Edad</label>
-                    <input type="text" id="editAge" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripción</label>
-                    <textarea id="editDesc" class="form-input" rows="4"></textarea>
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar Cambios</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <footer class="footer">
+        <p>📍 Guayaquil, Ecuador | © 2025 PAWI</p>
+    </footer>
 
-    <script type="module" src="main.js"></script>
     <script>
-        // Funciones auxiliares para abrir/cerrar modal desde HTML
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('active');
+        // 1. Datos iniciales exclusivos de Stephanie
+        const stephanieExclusives = [
+            { id: 's1', name: 'Max', age: '9 Años', desc: 'Husky siberiano, ojos celestes. Muy amigable con otros perros.', photo: 'Max01.png', qrData: 'MAX-PAWI' },
+            { id: 's2', name: 'Tommy', age: '8 Meses', desc: 'Gato gris con blanco, ojos verdes. Rescatado recientemente.', photo: 'Tommy01.jpeg', qrData: 'TOMMY-PAWI' }
+        ];
+
+        function init() {
+            const container = document.getElementById('petsContainer');
+            
+            // 2. OBTENER USUARIO REAL (Stephanie o Matías)
+            // Esto debe venir del login. Si no existe, usamos un valor por defecto para pruebas.
+            const currentUser = localStorage.getItem('pawi_user_name') || 'Usuario'; 
+            document.getElementById('displayUserName').innerText = currentUser;
+
+            let petsToShow = [];
+
+            // 3. LOGICA DE FILTRADO
+            // Solo si el usuario es Stephanie, cargamos a Max y Tommy
+            if (currentUser.toLowerCase() === 'stephanie') {
+                petsToShow = [...stephanieExclusives];
+            }
+
+            // 4. CARGAR MASCOTAS REGISTRADAS POR ESTE USUARIO ESPECÍFICO
+            // Usamos una clave única por usuario: 'pets_Stephanie', 'pets_Matías', etc.
+            const userKey = `pets_${currentUser}`;
+            const userSpecificPets = JSON.parse(localStorage.getItem(userKey)) || [];
+            
+            petsToShow = [...petsToShow, ...userSpecificPets];
+
+            if (petsToShow.length === 0) {
+                container.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px;'>No tienes mascotas registradas. Puedes agregar una en el dashboard.</p>";
+                return;
+            }
+
+            renderPets(petsToShow, container, currentUser);
         }
+
+        function renderPets(pets, container, user) {
+            container.innerHTML = '';
+            pets.forEach(pet => {
+                const card = document.createElement('div');
+                card.className = 'pet-card';
+                const qrContent = pet.qrData || `${pet.name}-PAWI`;
+                
+                card.innerHTML = `
+                    <div class="pet-photo-header">
+                        <img src="${pet.photo}" alt="${pet.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
+                    </div>
+                    <div class="pet-body">
+                        <div class="pet-name">${pet.name}</div>
+                        <div class="pet-age">${pet.age}</div>
+                        <p class="pet-desc">${pet.desc}</p>
+                    </div>
+                    <div class="qr-wrapper">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${qrContent}" class="qr-code">
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-pet btn-edit" onclick="location.href='registro_mascota.html?id=${pet.id}'">Editar</button>
+                        <button class="btn-pet btn-delete" onclick="deletePet('${pet.id}', '${pet.name}', '${user}')">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function deletePet(id, name, user) {
+            if (confirm(`¿Eliminar a ${name}?`)) {
+                const userKey = `pets_${user}`;
+                let userPets = JSON.parse(localStorage.getItem(userKey)) || [];
+                userPets = userPets.filter(p => p.id !== id);
+                localStorage.setItem(userKey, JSON.stringify(userPets));
+                init();
+            }
+        }
+
+        init();
     </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>

@@ -9,61 +9,127 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
 
-        /* NAVBAR */
-        .navbar { background-color: #fff; height: 90px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .logo-img { width: 50px; height: auto; }
-        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
-        .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .logo-img { height: 45px; width: auto; } 
+        .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
 
-        /* CARD PRINCIPAL */
-        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        .nav-user-badge {
+            display: flex; align-items: center; gap: 8px;
+            background-color: #FFF0E6; padding: 8px 15px; border-radius: 30px;
+            color: #F59E2D; font-weight: 700; font-size: 14px; white-space: nowrap;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .nav-user-badge:hover { background-color: #F59E2D; color: white; }
+
+        .nav-icon-btn {
+            font-size: 22px; text-decoration: none; color: #555;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8;
+        }
+        .nav-icon-btn:hover { transform: scale(1.1); background-color: #FFF0E6; color: #F59E2D; }
+        .back-btn svg { stroke: #555; transition: stroke 0.2s; }
+        .back-btn:hover svg { stroke: #F59E2D; }
+
+        /* --- CARD PRINCIPAL --- */
+        /* Padding reducido para que quepa mejor en pantalla */
+        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
         
         .main-card {
             background-color: white; width: 100%; max-width: 1000px; border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; min-height: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; 
+            /* Altura mínima ajustada */
+            min-height: 480px; 
         }
 
-        /* LADO IZQUIERDO: FOTO */
+        /* LADO IZQUIERDO */
         .visual-side {
-            flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background-color: #fff; border-right: 1px solid #f0f0f0;
         }
-        .collar-hero-img { width: 100%; max-width: 350px; height: auto; object-fit: contain; }
-        .description-text { font-size: 13px; color: #666; text-align: center; margin-top: 20px; line-height: 1.6; max-width: 90%; }
+        .collar-hero-img { width: 100%; max-width: 300px; height: auto; object-fit: contain; } /* Imagen un poco más pequeña */
+        .description-text { font-size: 13px; color: #666; text-align: center; margin-top: 20px; line-height: 1.5; max-width: 90%; }
 
-        /* LADO DERECHO: PASOS */
+        /* LADO DERECHO */
         .steps-side {
-            flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center;
+            flex: 1; padding: 35px; display: flex; flex-direction: column; justify-content: center;
         }
-        .steps-title { font-size: 28px; font-weight: 800; margin-bottom: 30px; line-height: 1.2; color: #111; }
+        .steps-title { font-size: 26px; font-weight: 800; margin-bottom: 25px; line-height: 1.2; color: #111; }
 
-        /* BOTONES DE PASOS (Solo visuales o links directos) */
+        /* ESTILOS DE LOS BOTONES DE PASOS */
         .step-btn {
             display: flex; justify-content: space-between; align-items: center;
-            width: 100%; padding: 18px 25px; margin-bottom: 15px;
-            border: 2px solid #F37021; border-radius: 15px; background: white;
-            color: #F37021; font-weight: 700; font-size: 15px; text-decoration: none;
+            width: 100%; padding: 15px 20px; margin-bottom: 12px;
+            border: 1px solid #eee; border-radius: 12px; background: white;
+            color: #555; font-weight: 600; font-size: 14px; text-decoration: none;
             transition: 0.3s; cursor: pointer;
         }
-        .step-btn:hover { background-color: #FFF0E6; transform: translateX(5px); }
         
-        /* BOTÓN PRINCIPAL DE ACCIÓN */
+        .step-btn:hover { 
+            border-color: #F59E2D; 
+            color: #F59E2D; 
+            background-color: #FFF0E6;
+            transform: translateX(5px); 
+        }
+
+        .step-arrow { opacity: 0; transition: 0.2s; font-size: 18px; }
+        .step-btn:hover .step-arrow { opacity: 1; }
+
+        /* BOTÓN FINAL (CTA) */
         .cta-btn {
-            background-color: #1F2937; color: white; border: none; padding: 20px;
+            background-color: #F59E2D; 
+            color: white; border: none; padding: 15px;
             border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer;
             margin-top: 20px; width: 100%; transition: 0.2s; text-align: center; text-decoration: none; display: block;
+            box-shadow: 0 10px 20px rgba(245, 158, 45, 0.2);
         }
-        .cta-btn:hover { background-color: #000; transform: scale(1.02); }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(245, 158, 45, 0.3); }
 
-        .footer { background-color: #1F2937; color: white; padding: 40px; text-align: center; }
+        /* FOOTER */
+        .footer { background-color: #1F2937; color: white; padding: 30px; text-align: center; margin-top: auto; }
+        .footer-address { font-size: 16px; font-weight: 600; }
+        .footer-contact { font-size: 14px; color: #ccc; }
+        
+        @media (max-width: 900px) {
+            .navbar { padding: 0 20px; }
+            .main-card { flex-direction: column; }
+            .visual-side { padding: 30px; border-right: none; border-bottom: 1px solid #eee; }
+            .steps-side { padding: 30px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="dashboard.html" class="nav-logo"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img"><span class="logo-text">Pawi</span></a>
-        <div class="nav-links"><a href="dashboard.html" class="nav-link">← Volver al Dashboard</a></div>
+        <a href="dashboard.html" class="nav-logo">
+            <img src="logoImagen.png" alt="Logo" class="logo-img">
+            <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
+        </a>
+
+        <div class="nav-right">
+            <div class="nav-user-badge" onclick="alert('Perfil de usuario en construcción')">
+                <span>👤 <span id="navUserName">Stephanie</span></span>
+            </div>
+
+            <a href="dashboard.html" class="nav-icon-btn back-btn" title="Volver al Dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </a>
+        </div>
     </nav>
 
     <div class="container">
@@ -79,25 +145,42 @@
             <div class="steps-side">
                 <h1 class="steps-title">Configura tu<br>Collar FIDO</h1>
 
-                <a href="elige_modelo.html" class="step-btn">
-                    1. Elige el modelo y color <span>→</span>
-                </a>
-
-                <div class="step-btn" style="border-color: #ddd; color: #999; cursor: default;">
-                    2. Verifica sus datos <span>(Siguiente paso)</span>
+                <div class="step-btn" onclick="alert('Paso: Verifica sus datos - En construcción')">
+                    Verifica sus datos
+                    <span class="step-arrow">→</span>
                 </div>
 
-                <div class="step-btn" style="border-color: #ddd; color: #999; cursor: default;">
-                    3. Personaliza la placa <span>(Paso final)</span>
+                <div class="step-btn" onclick="alert('Paso: Personaliza la placa - En construcción')">
+                    Personaliza la placa
+                    <span class="step-arrow">→</span>
                 </div>
 
-                <a href="elige_modelo.html" class="cta-btn">¡Comenzar Configuración Ahora!</a>
+                <div class="step-btn" onclick="window.location.href='elige_modelo.html'">
+                    Elige el modelo
+                    <span class="step-arrow">→</span>
+                </div>
+
+                <div class="step-btn" onclick="alert('Paso: Elige la placa - En construcción')">
+                    Elige la placa
+                    <span class="step-arrow">→</span>
+                </div>
+
+                <button class="cta-btn" onclick="alert('¡Felicidades por su compra! Su pedido está siendo verificado')">
+                    Obtener collar
+                </button>
             </div>
 
         </div>
     </div>
 
-    <footer class="footer"><p>© 2024 PAWI - Todos los derechos reservados.</p></footer>
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
+            <p class="footer-contact">📞 Contacto: 0993919389</p>
+            <p style="font-size: 12px; margin-top: 15px; color: #888;">© 2025 PAWI - Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
+    <script type="module" src="main.js"></script>
 </body>
 </html>

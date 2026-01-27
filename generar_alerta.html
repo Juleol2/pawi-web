@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWI - Generar Alerta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #fef2f2; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: #ffffff;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { height: 45px; width: auto; } 
+        .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        
+        .nav-icon-btn {
+            font-size: 22px; text-decoration: none; color: #555;
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8;
+            transition: 0.2s;
+        }
+        .nav-icon-btn:hover { background-color: #fee2e2; color: #dc2626; }
+        .back-btn svg { stroke: #555; }
+
+        /* --- CONTENIDO --- */
+        .container { flex: 1; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+        
+        .alert-card {
+            background: white; border-radius: 30px; padding: 30px;
+            box-shadow: 0 20px 40px rgba(220, 38, 38, 0.1);
+            border: 2px solid #fee2e2;
+        }
+
+        .header-alert { text-align: center; margin-bottom: 30px; }
+        .header-alert h1 { font-size: 28px; font-weight: 800; color: #dc2626; }
+        .header-alert p { color: #666; font-size: 14px; }
+
+        /* SELECCIÓN DE MASCOTA */
+        .section-title { font-size: 14px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        
+        .pet-selector { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .pet-option {
+            cursor: pointer; text-align: center; transition: 0.3s;
+            padding: 15px; border-radius: 20px; border: 2px solid transparent; width: 120px;
+        }
+        .pet-option:hover { background-color: #fef2f2; }
+        .pet-option.selected { border-color: #dc2626; background-color: #fef2f2; }
+        
+        .pet-thumb { 
+            width: 70px; height: 70px; border-radius: 50%; object-fit: cover; 
+            margin-bottom: 10px; border: 3px solid white; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .pet-option span { font-weight: 700; font-size: 14px; color: #444; }
+
+        /* FORMULARIO RÁPIDO */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 12px; font-weight: 700; color: #444; margin-bottom: 8px; }
+        .form-input { 
+            width: 100%; padding: 15px; background-color: #f9fafb; 
+            border: 1px solid #eee; border-radius: 12px; font-size: 14px; outline: none; 
+        }
+        .form-input:focus { border-color: #dc2626; background-color: white; }
+
+        /* MAPA SIMULADO */
+        .map-mini {
+            width: 100%; height: 200px; border-radius: 15px; background-color: #eee;
+            margin-bottom: 25px; border: 1px solid #ddd; overflow: hidden; position: relative;
+        }
+        .map-mini img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .map-marker {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%);
+            font-size: 30px; animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, -100%); }
+            50% { transform: translate(-50%, -110%); }
+        }
+
+        /* BOTÓN DE ACTIVACIÓN */
+        .btn-activate {
+            width: 100%; background-color: #dc2626; color: white; border: none;
+            padding: 20px; border-radius: 15px; font-size: 18px; font-weight: 800;
+            cursor: pointer; transition: 0.3s;
+            animation: pulse-red-strong 2s infinite;
+        }
+        .btn-activate:hover { background-color: #b91c1c; transform: scale(1.02); }
+
+        @keyframes pulse-red-strong {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; margin-top: auto; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="dashboard.html" class="nav-logo">
+            <img src="logoImagen.png" alt="Logo" class="logo-img">
+            <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
+        </a>
+        <div class="nav-right">
+            <a href="dashboard.html" class="nav-icon-btn back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="alert-card">
+            <div class="header-alert">
+                <h1>🚨 Generar Alerta</h1>
+                <p>Completa los datos rápidamente para dar aviso a la comunidad.</p>
+            </div>
+
+            <div class="section-title">¿Quién se perdió?</div>
+            <div class="pet-selector">
+                <div class="pet-option selected" onclick="selectPet(this)">
+                    <img src="Max01.png" class="pet-thumb" alt="Max" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
+                    <span>Max</span>
+                </div>
+                <div class="pet-option" onclick="selectPet(this)">
+                    <img src="Tommy01.jpeg" class="pet-thumb" alt="Tommy" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616430.png'">
+                    <span>Tommy</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Última vez visto en:</label>
+                <input type="text" class="form-input" placeholder="Ej: Av. Las Aguas, cerca del parque...">
+            </div>
+
+            <div class="section-title">Punto en el mapa</div>
+            <div class="map-mini">
+                <img src="https://img.freepik.com/premium-vector/city-map-navigation-smartphone-with-pointers_349999-281.jpg?w=740" alt="Mapa">
+                <div class="map-marker">📍</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Información adicional (Opcional):</label>
+                <textarea class="form-input" rows="2" placeholder="Ej: No tiene collar, es muy asustadizo..."></textarea>
+            </div>
+
+            <button class="btn-activate" onclick="lanzarAlerta()">¡LANZAR ALERTA AHORA!</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p style="font-size: 13px;">📍 Guayaquil, Ecuador | © 2025 PAWI</p>
+    </footer>
+
+    <script>
+        function selectPet(element) {
+            document.querySelectorAll('.pet-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function lanzarAlerta() {
+            const pet = document.querySelector('.pet-option.selected span').innerText;
+            if(confirm(`¿Estás seguro de lanzar la alerta para ${pet}? Se notificará a todos los usuarios cercanos.`)) {
+                alert(`¡ALERTA ACTIVADA! La comunidad ha sido notificada sobre ${pet}. Mantente cerca de tu teléfono.`);
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

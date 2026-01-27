@@ -28,54 +28,95 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 100;
         }
-        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .logo-img { width: 50px; height: auto; }
-        .logo-text { font-size: 28px; font-weight: 800; color: #F37021; text-transform: uppercase; }
         
-        .nav-links { display: flex; align-items: center; gap: 30px; }
-        .nav-link { text-decoration: none; color: #333; font-weight: 600; font-size: 16px; transition: color 0.3s; }
+        .nav-logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            text-decoration: none; 
+            flex-shrink: 0; 
+        }
 
-        /* Estilo para el botón de Alerta en el Navbar */
-.btn-nav-alert {
-    background-color: #dc2626; /* Rojo emergencia */
-    color: white;
-    padding: 10px 25px;
-    border-radius: 50px; /* Bordes redondos */
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espacio entre icono y texto */
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
-}
+        /* IMÁGENES DEL LOGO */
+        .logo-img { 
+            height: 50px; 
+            width: auto; 
+        } 
+        
+        .logo-text-img {
+            height: 35px; 
+            width: auto;
+            margin-top: 5px; 
+        }
+        
+        .nav-links { 
+            display: flex; 
+            align-items: center; 
+            gap: 25px; 
+        }
 
-.btn-nav-alert:hover {
-    background-color: #b91c1c; /* Rojo más oscuro al pasar el mouse */
-    transform: translateY(-2px); /* Pequeño efecto de elevación */
-    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
-}
+        .nav-link { 
+            text-decoration: none; 
+            color: #333; 
+            font-weight: 600; 
+            font-size: 16px; 
+            transition: color 0.3s; 
+            white-space: nowrap; 
+        }
 
-/* Animación de pulso suave para llamar la atención (Opcional) */
-@keyframes pulse-red {
-    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-}
+        /* --- BOTÓN ALERTA (Mantenido en ROJO por ser emergencia) --- */
+        .btn-nav-alert {
+            background-color: #dc2626; 
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+            animation: pulse-red 2s infinite;
+            white-space: nowrap; 
+        }
 
-.btn-nav-alert {
-    animation: pulse-red 2s infinite;
-}
-        .nav-link:hover { color: #F37021; }
+        .btn-nav-alert:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        /* Color Hover actualizado al NUEVO NARANJA */
+        .nav-link:hover { color: #F59E2D; }
         
         .nav-user-badge {
             display: flex; align-items: center; gap: 10px;
             background-color: #FFF0E6; 
             padding: 8px 20px;
             border-radius: 30px;
-            color: #F37021;
+            color: #F59E2D; /* NUEVO NARANJA */
             font-weight: 700;
+            font-size: 15px;
+            white-space: nowrap;
+            max-width: fit-content;
+        }
+
+        /* --- RESPONSIVIDAD --- */
+        @media (max-width: 992px) {
+            .navbar { padding: 0 20px; height: 80px; }
+            .nav-links { gap: 15px; }
+            .nav-link { font-size: 14px; }
+            .btn-nav-alert { padding: 8px 15px; font-size: 13px; }
+            .nav-user-badge { padding: 6px 12px; font-size: 13px; }
+            .logo-img { height: 40px; }
+            .logo-text-img { height: 28px; }
         }
 
         /* --- CONTENEDOR PRINCIPAL --- */
@@ -91,41 +132,85 @@
         .welcome-card {
             background-color: white;
             border-radius: 30px;
-            padding: 50px;
+            padding: 45px 50px; 
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
+            margin-bottom: 40px; 
             position: relative;
             overflow: hidden;
         }
 
+        /* RAYA NARANJA (DERECHA) - COLOR CORREGIDO */
         .welcome-card::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 10px; background-color: #F37021;
+            content: ''; 
+            position: absolute; 
+            right: 0; 
+            top: 0; bottom: 0; 
+            width: 12px; 
+            background-color: #F59E2D; /* NUEVO NARANJA */
         }
 
-        .welcome-text h1 { font-size: 36px; font-weight: 800; color: #111; margin-bottom: 10px; }
-        .welcome-text p { font-size: 18px; color: #666; max-width: 500px; }
+        .welcome-text h1 { 
+            font-size: 34px; font-weight: 800; color: #111; margin-bottom: 8px; line-height: 1.2;
+        }
+        .welcome-text p { font-size: 17px; color: #666; max-width: 500px; }
         
-        .welcome-img {
-            width: 220px; height: auto;
-            animation: float 6s ease-in-out infinite;
+        /* --- FOTO DE PERFIL --- */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-right: 30px; 
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); }
+        .profile-pic-wrapper {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            position: relative;
         }
 
-        /* --- GRID DE 5 OPCIONES --- */
+        .profile-pic-wrapper img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: none; 
+        }
+
+        .default-user-icon { font-size: 45px; color: #9ca3af; }
+
+        /* Botón cámara - COLOR CORREGIDO */
+        .edit-photo-btn {
+            position: absolute; bottom: 0; right: 0;
+            background-color: #F59E2D; /* NUEVO NARANJA */
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            border: 3px solid white;
+            font-size: 16px;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .edit-photo-btn:hover { transform: scale(1.1); }
+        #fileInput { display: none; }
+
+
+        /* --- GRID --- */
         .dashboard-grid {
             display: grid;
-            /* Se ajusta automáticamente, pero intentará poner tantos como quepan */
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 25px;
+            padding-bottom: 20px;
         }
 
-        /* Estilo base de las tarjetas normales */
         .menu-card {
             background-color: white;
             border-radius: 25px;
@@ -135,70 +220,47 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             min-height: 220px;
         }
 
         .menu-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(243, 112, 33, 0.15);
-            border-color: #F37021;
+            /* Sombra actualizada con el tono nuevo (aprox rgba(245, 158, 45, 0.15)) */
+            box-shadow: 0 20px 40px rgba(245, 158, 45, 0.15); 
+            border-color: #F59E2D; /* NUEVO NARANJA */
         }
 
         .card-icon { 
-            font-size: 40px; 
-            margin-bottom: 20px; 
+            font-size: 40px; margin-bottom: 20px; 
             background-color: #fef5f0; 
             width: 80px; height: 80px;
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
         }
 
-        .card-title { font-size: 16px; font-weight: 700; color: #333; }
+        .card-title { font-size: 16px; font-weight: 700; color: #333; line-height: 1.4; }
 
-
-        /* --- ESTILO ESPECIAL PARA EL BOTÓN DE ALERTA (EL 5TO) --- */
         .menu-card.alert-mode {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); /* Fondo Rojo Degradado */
-            color: white;
-            border: none;
-            /* Sombra roja resplandeciente */
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
-            /* Animación de latido */
             animation: pulse-border 2s infinite;
         }
+        .menu-card.alert-mode .card-icon { background-color: rgba(255,255,255,0.2); color: white; }
+        .menu-card.alert-mode .card-title { color: white; }
 
-        .menu-card.alert-mode:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 20px 50px rgba(220, 38, 38, 0.6);
-        }
-
-        .menu-card.alert-mode .card-icon {
-            background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente blanco */
-            color: white;
-            font-size: 50px;
-        }
-
-        .menu-card.alert-mode .card-title {
-            color: white;
-            font-size: 18px; /* Un poco más grande */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Definición de la animación de pulso */
         @keyframes pulse-border {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-
         /* --- FOOTER --- */
-        .footer { background-color: #1F2937; color: white; padding: 40px 20px; text-align: center; margin-top: auto; }
+        .footer { 
+            background-color: #1F2937; color: white; 
+            padding: 40px 20px; text-align: center; margin-top: auto; 
+        }
         .footer-address { font-size: 18px; font-weight: 600; }
         .footer-contact { font-size: 16px; color: #ccc; }
 
@@ -208,22 +270,22 @@
 
    <nav class="navbar">
     <a href="dashboard.html" class="nav-logo">
-        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="logo-img">
-        <span class="logo-text">Pawi</span>
+        <img src="logoImagen.png" alt="Logo" class="logo-img">
+        <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
     </a>
 
     <div class="nav-links">
-        <a href="#" class="btn-nav-alert" onclick="alert('Funcionalidad de alerta en construcción')">
-            🚨 Generar Alerta
-        </a>
+    <a href="generar_alerta.html" class="btn-nav-alert">
+        🚨 <span class="alert-text">Generar Alerta</span>
+    </a>
 
-        <a href="dashboard.html" class="nav-link">Inicio</a>
-        
-        <div class="nav-user-badge">
-            <span>👤 <span id="navUserName">Cargando...</span></span>
-        </div>
-        
-        <a href="login.html" class="nav-link" style="color: #dc2626;">Salir</a>
+    <a href="dashboard.html" class="nav-link">Inicio</a>
+    
+    <div class="nav-user-badge">
+        <span>👤 <span id="navUserName">Cargando...</span></span>
+    </div>
+    
+    <a href="login.html" class="nav-link" style="color: #dc2626;">Salir</a>
     </div>
 </nav>
 
@@ -232,17 +294,28 @@
         
         <div class="welcome-card">
             <div class="welcome-text">
-    <h1>Hola, <span id="welcomeName">Usuario</span>!<br>¿Qué quieres hacer hoy?</h1>
-    <p>Gestiona el cuidado y seguridad de tu mascota desde un solo lugar.</p>
-</div>
-            <img src="1.jpg" alt="Perro Detective" class="welcome-img">
+                <h1>Hola, <span id="welcomeName">Cargando...</span>!<br>¿Qué quieres hacer hoy?</h1>
+                <p>Gestiona el cuidado y seguridad de tu mascota desde un solo lugar.</p>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic-wrapper">
+                    <span class="default-user-icon">👤</span>
+                    <img id="displayProfilePic" src="" alt="Foto de perfil">
+                </div>
+                
+                <label for="fileInput" class="edit-photo-btn" title="Cambiar foto">
+                    📷
+                </label>
+                <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+            </div>
         </div>
 
         <div class="dashboard-grid">
             <div class="menu-card" onclick="window.location.href='mis_mascotas.html'">
-    <div class="card-icon" style="background-color: #e0f2fe; color: #0284c7;">🐾</div>
-    <h3 class="card-title">Ver mis<br>mascotas</h3>
-</div>
+                <div class="card-icon" style="background-color: #e0f2fe; color: #0284c7;">🐾</div>
+                <h3 class="card-title">Ver mis<br>mascotas</h3>
+            </div>
             
             <div class="menu-card" onclick="window.location.href='registro_mascota.html'">
                 <div class="card-icon">🐕</div>
@@ -264,8 +337,6 @@
                 <h3 class="card-title">Foro<br>Comunitario</h3>
             </div>
 
- 
-
         </div>
 
     </div>
@@ -273,12 +344,49 @@
     <footer class="footer">
         <div class="footer-content">
             <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
-            <p class="footer-contact">📞 Contacto: 093918273</p>
-            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2024 PAWI - Todos los derechos reservados.</p>
+            <p class="footer-contact">📞 Contacto: 0993919389</p>
+            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2025 PAWI - Todos los derechos reservados.</p>
         </div>
     </footer>
 
+<script>
+    // Función para previsualizar la foto de perfil
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById('displayProfilePic');
+            output.src = reader.result;
+            output.style.display = 'block'; 
+            document.querySelector('.default-user-icon').style.display = 'none'; 
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // LÓGICA DE NOMBRE DINÁMICO UNIFICADA
+    document.addEventListener('DOMContentLoaded', () => {
+        // Intentamos obtener el nombre del localStorage
+        const userName = localStorage.getItem('pawi_user_name');
+        
+        if (userName) {
+            // 1. Actualizar el nombre en el Navbar
+            const navElement = document.getElementById('navUserName');
+            if (navElement) navElement.innerText = userName;
+
+            // 2. Actualizar el nombre en el saludo de bienvenida (Welcome Card)
+            const welcomeElement = document.getElementById('welcomeName');
+            if (welcomeElement) {
+                // Tomamos solo el primer nombre para el saludo (ej: Matías)
+                const firstName = userName.split(' ')[0];
+                welcomeElement.innerText = firstName;
+            }
+        } else {
+            // Si no hay nada en localStorage, el main.js de Firebase se encargará
+            // Pero por defecto, dejamos que cargue.
+            console.log("Esperando a que Firebase (main.js) proporcione el nombre...");
+        }
+    });
+</script>
+
 <script type="module" src="main.js"></script>
 </body>
-
 </html>
