@@ -106,12 +106,6 @@
 
             let petsToShow = [];
 
-            // 3. LOGICA DE FILTRADO
-            // Solo si el usuario es Stephanie, cargamos a Max y Tommy
-            if (currentUser.toLowerCase() === 'stephanie') {
-                petsToShow = [...stephanieExclusives];
-            }
-
             // 4. CARGAR MASCOTAS REGISTRADAS POR ESTE USUARIO ESPECÍFICO
             // Usamos una clave única por usuario: 'pets_Stephanie', 'pets_Matías', etc.
             const userKey = `pets_${currentUser}`;
@@ -169,4 +163,5 @@
     </script>
     <script type="module" src="main.js"></script>
 </body>
+
 </html>
