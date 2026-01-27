@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ---------------------------------------------------------
-    // 2. LOGICA DE REGISTRO, LOGIN Y LOGOUT (Mismo de antes)
+    // 2. LOGICA DE REGISTRO, LOGIN Y LOGOUT
     // ---------------------------------------------------------
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
@@ -108,13 +108,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.addEventListener('click', async (e) => {
             e.preventDefault();
             localStorage.removeItem('pawi_user_name');
+            localStorage.removeItem('pawi_cached_pets'); // Limpiamos caché de mascotas al salir
             await signOut(auth);
             window.location.href = 'login.html';
         });
     });
 
     // ---------------------------------------------------------
-    // 3. REGISTRO DE MASCOTAS (Mismo de antes)
+    // 3. REGISTRO DE MASCOTAS
     // ---------------------------------------------------------
     const petForm = document.getElementById('petRegisterForm');
     if (petForm) {
@@ -125,7 +126,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 btn.disabled = true; btn.textContent = "Guardando...";
                 const photoSrc = previewImg ? previewImg.src : "https://cdn-icons-png.flaticon.com/512/616/616408.png";
-                await addDoc(collection(db, "pets"), {
+                
+                // Guardar en Firebase
+                const newDoc = await addDoc(collection(db, "pets"), {
                     ownerId: user.uid,
                     name: document.getElementById('petName').value,
                     age: document.getElementById('petAge').value,
@@ -133,6 +136,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     photo: photoSrc,
                     createdAt: new Date()
                 });
+                
+                // Limpiar caché local para forzar recarga fresca
+                localStorage.removeItem('pawi_cached_pets');
+                
                 alert("¡Mascota registrada!");
                 window.location.href = 'mis_mascotas.html';
             } catch (err) { alert("Error: " + err.message); btn.disabled = false; }
@@ -149,34 +156,115 @@ document.addEventListener('DOMContentLoaded', async () => {
         const forumAvatar = document.getElementById('forumUserInitials');
         const forumPlaceholder = document.getElementById('postInputPlaceholder');
 
-        try {
-            const q = query(collection(db, "users"), where("uid", "==", user.uid));
-            const snap = await getDocs(q);
-            
-            if (!snap.empty) {
-                const userData = snap.docs[0].data();
-                const fullName = userData.fullName;
-                const firstName = fullName.split(' ')[0];
-                localStorage.setItem('pawi_user_name', fullName);
+        // Intentar usar nombre guardado para velocidad
+        let fullName = localStorage.getItem('pawi_user_name');
 
-                if (welcomeName) welcomeName.textContent = firstName;
-                if (navUserName) navUserName.textContent = fullName;
-                if (displayUserName) displayUserName.textContent = fullName;
-                if (forumAvatar) forumAvatar.textContent = fullName.charAt(0).toUpperCase();
-                if (forumPlaceholder) forumPlaceholder.placeholder = `¿Qué estás pensando, ${firstName}?`;
-            }
-        } catch (e) { console.error("Error UI:", e); }
+        if (!fullName) {
+            try {
+                const q = query(collection(db, "users"), where("uid", "==", user.uid));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    fullName = snap.docs[0].data().fullName;
+                    localStorage.setItem('pawi_user_name', fullName);
+                }
+            } catch (e) { console.error("Error UI:", e); }
+        }
 
-        // CARGAS ESPECÍFICAS POR PÁGINA
+        if (fullName) {
+            const firstName = fullName.split(' ')[0];
+            if (welcomeName) welcomeName.textContent = firstName;
+            if (navUserName) navUserName.textContent = fullName;
+            if (displayUserName) displayUserName.textContent = fullName;
+            if (forumAvatar) forumAvatar.textContent = fullName.charAt(0).toUpperCase();
+            if (forumPlaceholder) forumPlaceholder.placeholder = `¿Qué estás pensando, ${firstName}?`;
+        }
+
+        // CARGAS ESPECÍFICAS
         if (document.getElementById('petsContainer')) loadUserPets(user.uid);
         if (document.getElementById('petSelect')) loadPetsForCollar(user.uid);
-        
-        // ---> AQUÍ AGREGAMOS LA CARGA DE LA ALERTA <---
         if (document.getElementById('alertPetSelector')) loadPetsForAlert(user.uid);
     }
 
     // ==========================================
-    // 5. CARGAR MASCOTAS PARA ALERTA (NUEVO)
+    // 5. CARGAR MASCOTAS CON CACHÉ (VELOCIDAD)
+    // ==========================================
+    async function loadUserPets(userId) {
+        const grid = document.getElementById('petsContainer');
+        if (!grid) return;
+
+        // A) CARGA INMEDIATA DESDE CACHÉ (Si existe)
+        const cachedData = localStorage.getItem('pawi_cached_pets');
+        if (cachedData) {
+            console.log("Cargando mascotas desde caché (rápido)...");
+            renderPetsToGrid(JSON.parse(cachedData), grid);
+        } else {
+            grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Cargando mascotas...</p>";
+        }
+
+        // B) CARGA REAL DESDE FIREBASE (Segundo plano)
+        try {
+            const q = query(collection(db, "pets"), where("ownerId", "==", userId));
+            const snap = await getDocs(q);
+            let list = [];
+
+            const name = localStorage.getItem('pawi_user_name') || "";
+            // Lógica Stephanie
+            if (name.toLowerCase().includes('stephanie')) {
+                list.push({ id: 's1', name: 'Max', age: '9 Años', description: 'Husky...', photo: 'Max01.png' }, { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato...', photo: 'Tommy01.jpeg' });
+            }
+
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+
+            // Guardar en caché y renderizar de nuevo
+            localStorage.setItem('pawi_cached_pets', JSON.stringify(list));
+            renderPetsToGrid(list, grid);
+
+        } catch (e) { console.error(e); }
+    }
+
+    // FUNCIÓN DE DIBUJADO (Reutilizable para evitar duplicados)
+    function renderPetsToGrid(list, grid) {
+        if (list.length === 0) {
+            grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas.</p>";
+            return;
+        }
+
+        grid.innerHTML = ""; // Limpiar antes de dibujar
+        list.forEach(p => {
+            // Corrección del QR para subcarpetas
+            const currentUrl = window.location.href;
+            const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+            const fullLink = `${basePath}/encontrado.html?id=${p.id}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
+
+            grid.innerHTML += `
+                <div class="pet-card">
+                    <div class="pet-photo-header"><img src="${p.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'"></div>
+                    <div class="pet-body">
+                        <div class="pet-name">${p.name}</div>
+                        <div class="pet-age">${p.age}</div>
+                        <p class="pet-desc">${p.description}</p>
+                    </div>
+                    <div class="qr-wrapper"><img src="${qrUrl}" class="qr-code"></div>
+                    <div class="card-actions"><button class="btn-pet btn-delete" data-id="${p.id}">Eliminar</button></div>
+                </div>`;
+        });
+
+        // Reactivar eventos de eliminar
+        grid.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = async (e) => {
+                if (confirm("¿Borrar?")) { 
+                    await deleteDoc(doc(db, "pets", e.target.dataset.id)); 
+                    // Borrar caché para que se actualice al recargar
+                    localStorage.removeItem('pawi_cached_pets');
+                    location.reload(); 
+                }
+            };
+        });
+    }
+
+    // ==========================================
+    // 6. CARGA PARA ALERTA
     // ==========================================
     async function loadPetsForAlert(userId) {
         const selector = document.getElementById('alertPetSelector');
@@ -186,99 +274,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             const q = query(collection(db, "pets"), where("ownerId", "==", userId));
             const snap = await getDocs(q);
             let list = [];
-
             const name = localStorage.getItem('pawi_user_name') || "";
             if (name.toLowerCase().includes('stephanie')) {
-                list.push(
-                    { id: 's1', name: 'Max', photo: 'Max01.png' },
-                    { id: 's2', name: 'Tommy', photo: 'Tommy01.jpeg' }
-                );
+                list.push({ id: 's1', name: 'Max', photo: 'Max01.png' }, { id: 's2', name: 'Tommy', photo: 'Tommy01.jpeg' });
             }
-
             snap.forEach(d => list.push({ id: d.id, ...d.data() }));
 
             selector.innerHTML = "";
             if (list.length === 0) {
-                selector.innerHTML = "<p>No tienes mascotas registradas. <a href='registro_mascota.html'>Registra una</a></p>";
+                selector.innerHTML = "<p>Sin mascotas. <a href='registro_mascota.html'>Registrar</a></p>";
                 return;
             }
 
-            // Crear los botones de selección
             list.forEach(pet => {
                 const div = document.createElement('div');
                 div.className = 'pet-option';
-                div.dataset.id = pet.id; // Guardamos el ID real
+                div.dataset.id = pet.id;
                 div.dataset.name = pet.name;
-                div.innerHTML = `
-                    <img src="${pet.photo}" class="pet-thumb" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
-                    <span>${pet.name}</span>
-                `;
-                // LÓGICA BOTÓN GPS (NUEVO)
+                div.innerHTML = `<img src="${pet.photo}" class="pet-thumb" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'"><span>${pet.name}</span>`;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.pet-option').forEach(opt => opt.classList.remove('selected'));
+                    div.classList.add('selected');
+                });
+                selector.appendChild(div);
+            });
+
             const btnGps = document.getElementById('btnGetGps');
             const gpsStatus = document.getElementById('gpsStatus');
-            let currentLocation = null; // Variable para guardar coords
+            let currentLocation = null;
 
             if (btnGps) {
                 btnGps.addEventListener('click', () => {
                     if (!navigator.geolocation) return alert("GPS no disponible");
-                    
                     btnGps.innerHTML = "⏳ Obteniendo...";
-                    
                     navigator.geolocation.getCurrentPosition((pos) => {
-                        currentLocation = { 
-                            lat: pos.coords.latitude, 
-                            lng: pos.coords.longitude 
-                        };
-                        
+                        currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                         btnGps.innerHTML = "📍 Ubicación Actualizada";
                         btnGps.style.color = "#16a34a";
                         if(gpsStatus) gpsStatus.style.display = 'block';
-                        
-                        // Opcional: Rellenar el campo de texto automáticamente
                         const inputUbi = document.getElementById('lastSeen');
-                        if(inputUbi && !inputUbi.value) {
-                            inputUbi.value = "Ubicación GPS detectada";
-                        }
-
+                        if(inputUbi && !inputUbi.value) inputUbi.value = "Ubicación GPS detectada";
                     }, (err) => {
-                        alert("Error al obtener ubicación. Asegúrate de permitir el acceso.");
+                        alert("Error GPS: Permite el acceso.");
                         btnGps.innerHTML = "Usar mi ubicación actual";
                     });
                 });
             }
 
-            // LÓGICA BOTÓN LANZAR ALERTA (Actualizada con coords)
-            const btnAlert = document.getElementById('btnLanzarAlerta');
-            if(btnAlert) {
-                btnAlert.addEventListener('click', async () => {
-                    // ... (validaciones de selección de mascota) ...
-                    
-                    // Aseguramos que tengamos ubicación (Texto o Coordenadas)
-                    const lastSeen = document.getElementById('lastSeen').value;
-                    if(!lastSeen && !currentLocation) return alert("Indica una ubicación o usa el GPS.");
-
-                    try {
-                        // ... código de envío ...
-                        await addDoc(collection(db, "alerts"), {
-                            // ... otros campos ...
-                            location: currentLocation, // <--- Guardamos las coordenadas reales aquí
-                            lastSeenLocation: lastSeen,
-                            // ...
-                        });
-                        // ...
-                    } catch(err) { console.error(err); }
-                });
-            }
-                // Evento de selección
-                div.addEventListener('click', () => {
-                    document.querySelectorAll('.pet-option').forEach(opt => opt.classList.remove('selected'));
-                    div.classList.add('selected');
-                });
-
-                selector.appendChild(div);
-            });
-
-            // LÓGICA DEL BOTÓN LANZAR ALERTA
             const btnAlert = document.getElementById('btnLanzarAlerta');
             if(btnAlert) {
                 btnAlert.addEventListener('click', async () => {
@@ -286,42 +328,34 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const lastSeen = document.getElementById('lastSeen').value;
                     const extraInfo = document.getElementById('extraInfo').value;
 
-                    if(!selected) return alert("Por favor selecciona qué mascota se perdió.");
-                    if(!lastSeen) return alert("Por favor indica dónde fue vista por última vez.");
+                    if(!selected) return alert("Selecciona una mascota.");
+                    if(!lastSeen && !currentLocation) return alert("Indica una ubicación.");
 
-                    if(confirm(`¿Confirmar ALERTA para ${selected.dataset.name}?`)) {
+                    if(confirm(`¿Lanzar ALERTA para ${selected.dataset.name}?`)) {
                         try {
-                            btnAlert.disabled = true; 
-                            btnAlert.textContent = "ENVIANDO A LA COMUNIDAD...";
-
-                            // Guardar en colección de alertas
+                            btnAlert.disabled = true; btnAlert.textContent = "ENVIANDO...";
                             await addDoc(collection(db, "alerts"), {
                                 type: 'LOST',
                                 petId: selected.dataset.id,
                                 petName: selected.dataset.name,
                                 ownerId: userId,
+                                location: currentLocation,
                                 lastSeenLocation: lastSeen,
                                 extraInfo: extraInfo,
                                 timestamp: new Date(),
                                 status: 'active'
                             });
-
-                            alert("¡ALERTA ENVIADA! La comunidad ha sido notificada.");
+                            alert("¡ALERTA ENVIADA!");
                             window.location.href = 'dashboard.html';
-                        } catch(err) {
-                            console.error(err);
-                            alert("Error al enviar alerta.");
-                            btnAlert.disabled = false;
-                        }
+                        } catch(err) { console.error(err); alert("Error."); btnAlert.disabled = false; }
                     }
                 });
             }
-
-        } catch (e) { console.error(e); selector.innerHTML = "Error al cargar."; }
+        } catch (e) { console.error(e); }
     }
 });
 
-// Función Global para Página Pública (Found Page) - Sin cambios
+// Función Página Pública (Found Page) - Sin cambios, necesaria
 async function handleFoundPage() {
     const params = new URLSearchParams(window.location.search);
     const petId = params.get('id');
@@ -357,7 +391,6 @@ async function handleFoundPage() {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
                         const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
-
                         try {
                             await addDoc(collection(db, "alerts"), {
                                 type: 'FOUND_SCAN',
@@ -365,47 +398,14 @@ async function handleFoundPage() {
                                 location: { lat, lng }, mapsLink: mapLink,
                                 timestamp: new Date(), status: 'unread'
                             });
-                            alert("¡Ubicación enviada al dueño!");
+                            alert("¡Ubicación enviada!");
                             btnLocation.style.display = 'none';
                             const statusEl = document.getElementById('locationStatus');
                             if(statusEl) statusEl.style.display = 'block';
-                        } catch (err) { alert("Error enviando notificación."); }
+                        } catch (err) { alert("Error."); }
                     });
                 });
             }
         }
     } catch (error) { console.error(error); }
-}
-
-// Función Cargar Mascotas (Dashboard) - Sin cambios
-async function loadUserPets(userId) {
-    const grid = document.getElementById('petsContainer');
-    if (!grid) return;
-    try {
-        const q = query(collection(db, "pets"), where("ownerId", "==", userId));
-        const snap = await getDocs(q);
-        let list = [];
-        const name = localStorage.getItem('pawi_user_name') || "";
-        if (name.toLowerCase().includes('stephanie')) {
-            list.push({ id: 's1', name: 'Max', age: '9 Años', description: 'Husky...', photo: 'Max01.png' }, { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato...', photo: 'Tommy01.jpeg' });
-        }
-        snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-        grid.innerHTML = list.length ? "" : "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas.</p>";
-        list.forEach(p => {
-            const qrLink = `${window.location.href.substring(0, window.location.href.lastIndexOf('/'))}/encontrado.html?id=${p.id}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrLink)}`;
-            grid.innerHTML += `
-                <div class="pet-card">
-                    <div class="pet-photo-header"><img src="${p.photo}"></div>
-                    <div class="pet-body"><div class="pet-name">${p.name}</div><div class="pet-age">${p.age}</div><p class="pet-desc">${p.description}</p></div>
-                    <div class="qr-wrapper"><img src="${qrUrl}" class="qr-code"></div>
-                    <div class="card-actions"><button class="btn-pet btn-delete" data-id="${p.id}">Eliminar</button></div>
-                </div>`;
-        });
-        grid.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = async (e) => {
-                if (confirm("¿Borrar?")) { await deleteDoc(doc(db, "pets", e.target.dataset.id)); location.reload(); }
-            };
-        });
-    } catch (e) { console.error(e); }
 }
