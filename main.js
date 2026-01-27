@@ -11,14 +11,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ==========================================
     // 0. LÓGICA DE PÁGINA PÚBLICA (ENCONTRADO.HTML)
     // ==========================================
-    // Esta sección debe ir PRIMERO para que cargue sin pedir login
     if (window.location.pathname.includes('encontrado.html')) {
         await handleFoundPage();
-        return; // Detenemos el resto del script aquí
+        return; 
     }
 
     // ---------------------------------------------------------
-    // 1. SEGURIDAD Y REDIRECCIÓN (Evita rebotes)
+    // 1. SEGURIDAD Y REDIRECCIÓN
     // ---------------------------------------------------------
     const checkAuth = () => {
         return new Promise((resolve) => {
@@ -31,28 +30,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const user = await checkAuth();
     const path = window.location.pathname;
-    const paginasProtegidas = ['dashboard', 'mis_mascotas', 'registro_mascota', 'foro', 'collar', 'personaliza'];
+    const paginasProtegidas = ['dashboard', 'mis_mascotas', 'registro_mascota', 'foro', 'collar', 'personaliza', 'generar_alerta'];
     const necesitaLogin = paginasProtegidas.some(p => path.includes(p));
 
-    // Si no hay usuario y trata de entrar a página privada -> Login
     if (!user && necesitaLogin) {
         window.location.href = 'login.html';
         return;
     }
 
-    // Si hay usuario, cargamos su interfaz
     if (user) {
         await inicializarInterfazUsuario(user);
     }
 
     // ---------------------------------------------------------
-    // 2. LÓGICA DE REGISTRO DE USUARIO (SIGNUP)
+    // 2. LOGICA DE REGISTRO, LOGIN Y LOGOUT (Mismo de antes)
     // ---------------------------------------------------------
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const nombre = document.getElementById('signupName').value;
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
@@ -62,11 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!tipo) return alert("Selecciona un tipo de usuario");
 
             try {
-                btnSubmit.disabled = true;
-                btnSubmit.textContent = "Creando cuenta...";
-
+                btnSubmit.disabled = true; btnSubmit.textContent = "Creando cuenta...";
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
                 const fullNameCap = nombre.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
                 
                 await addDoc(collection(db, "users"), {
@@ -78,25 +71,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 localStorage.setItem('pawi_user_name', fullNameCap);
-
                 alert("¡Cuenta creada! Bienvenido.");
                 window.location.href = 'dashboard.html';
-
             } catch (error) {
                 console.error(error);
-                if (error.code === 'auth/email-already-in-use') alert("El correo ya está registrado.");
-                else if (error.code === 'auth/weak-password') alert("La contraseña es muy débil (mínimo 6 caracteres).");
-                else alert("Error: " + error.message);
-                
+                alert("Error: " + error.message);
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = "Registrarse";
             }
         });
     }
 
-    // ---------------------------------------------------------
-    // 3. LÓGICA DE INICIO DE SESIÓN (LOGIN)
-    // ---------------------------------------------------------
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -106,64 +90,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             const btnSubmit = loginForm.querySelector('.btn-submit');
 
             try {
-                btnSubmit.disabled = true;
-                btnSubmit.textContent = "Ingresando...";
-                
+                btnSubmit.disabled = true; btnSubmit.textContent = "Ingresando...";
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                
                 const q = query(collection(db, "users"), where("uid", "==", userCredential.user.uid));
                 const snap = await getDocs(q);
-                if (!snap.empty) {
-                    localStorage.setItem('pawi_user_name', snap.docs[0].data().fullName);
-                }
-
+                if (!snap.empty) localStorage.setItem('pawi_user_name', snap.docs[0].data().fullName);
                 window.location.href = 'dashboard.html';
             } catch (error) {
-                alert("Correo o contraseña incorrectos.");
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = "Iniciar Sesión";
+                alert("Credenciales incorrectas.");
+                btnSubmit.disabled = false; btnSubmit.textContent = "Iniciar Sesión";
             }
         });
     }
 
-    // ---------------------------------------------------------
-    // 4. GESTIÓN DE MASCOTAS (REGISTRO)
-    // ---------------------------------------------------------
-    const petForm = document.getElementById('petRegisterForm');
-    if (petForm) {
-        petForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = petForm.querySelector('.btn-submit');
-            const previewImg = document.getElementById('previewImage');
-            
-            try {
-                btn.disabled = true;
-                btn.textContent = "Guardando...";
-                
-                const photoSrc = previewImg ? previewImg.src : "https://cdn-icons-png.flaticon.com/512/616/616408.png";
-
-                await addDoc(collection(db, "pets"), {
-                    ownerId: user.uid,
-                    name: document.getElementById('petName').value,
-                    age: document.getElementById('petAge').value,
-                    description: document.getElementById('petDesc').value,
-                    photo: photoSrc,
-                    createdAt: new Date()
-                });
-                
-                alert("¡Mascota registrada!");
-                window.location.href = 'mis_mascotas.html';
-            } catch (err) { 
-                alert("Error al registrar: " + err.message); 
-                btn.disabled = false; 
-                btn.textContent = "Guardar Mascota";
-            }
-        });
-    }
-
-    // ---------------------------------------------------------
-    // 5. CERRAR SESIÓN
-    // ---------------------------------------------------------
     const logoutBtns = document.querySelectorAll('.logout-btn, a[href="login.html"]');
     logoutBtns.forEach(btn => {
         btn.addEventListener('click', async (e) => {
@@ -175,7 +114,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ---------------------------------------------------------
-    // 6. FUNCIONES AUXILIARES
+    // 3. REGISTRO DE MASCOTAS (Mismo de antes)
+    // ---------------------------------------------------------
+    const petForm = document.getElementById('petRegisterForm');
+    if (petForm) {
+        petForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = petForm.querySelector('.btn-submit');
+            const previewImg = document.getElementById('previewImage');
+            try {
+                btn.disabled = true; btn.textContent = "Guardando...";
+                const photoSrc = previewImg ? previewImg.src : "https://cdn-icons-png.flaticon.com/512/616/616408.png";
+                await addDoc(collection(db, "pets"), {
+                    ownerId: user.uid,
+                    name: document.getElementById('petName').value,
+                    age: document.getElementById('petAge').value,
+                    description: document.getElementById('petDesc').value,
+                    photo: photoSrc,
+                    createdAt: new Date()
+                });
+                alert("¡Mascota registrada!");
+                window.location.href = 'mis_mascotas.html';
+            } catch (err) { alert("Error: " + err.message); btn.disabled = false; }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 4. FUNCIONES AUXILIARES E INTERFAZ
     // ---------------------------------------------------------
     async function inicializarInterfazUsuario(user) {
         const welcomeName = document.getElementById('welcomeName');
@@ -197,82 +162,173 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (welcomeName) welcomeName.textContent = firstName;
                 if (navUserName) navUserName.textContent = fullName;
                 if (displayUserName) displayUserName.textContent = fullName;
-                
                 if (forumAvatar) forumAvatar.textContent = fullName.charAt(0).toUpperCase();
                 if (forumPlaceholder) forumPlaceholder.placeholder = `¿Qué estás pensando, ${firstName}?`;
             }
         } catch (e) { console.error("Error UI:", e); }
 
+        // CARGAS ESPECÍFICAS POR PÁGINA
         if (document.getElementById('petsContainer')) loadUserPets(user.uid);
         if (document.getElementById('petSelect')) loadPetsForCollar(user.uid);
+        
+        // ---> AQUÍ AGREGAMOS LA CARGA DE LA ALERTA <---
+        if (document.getElementById('alertPetSelector')) loadPetsForAlert(user.uid);
+    }
+
+    // ==========================================
+    // 5. CARGAR MASCOTAS PARA ALERTA (NUEVO)
+    // ==========================================
+    async function loadPetsForAlert(userId) {
+        const selector = document.getElementById('alertPetSelector');
+        selector.innerHTML = "<p>Buscando...</p>";
+
+        try {
+            const q = query(collection(db, "pets"), where("ownerId", "==", userId));
+            const snap = await getDocs(q);
+            let list = [];
+
+            const name = localStorage.getItem('pawi_user_name') || "";
+            if (name.toLowerCase().includes('stephanie')) {
+                list.push(
+                    { id: 's1', name: 'Max', photo: 'Max01.png' },
+                    { id: 's2', name: 'Tommy', photo: 'Tommy01.jpeg' }
+                );
+            }
+
+            snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+
+            selector.innerHTML = "";
+            if (list.length === 0) {
+                selector.innerHTML = "<p>No tienes mascotas registradas. <a href='registro_mascota.html'>Registra una</a></p>";
+                return;
+            }
+
+            // Crear los botones de selección
+            list.forEach(pet => {
+                const div = document.createElement('div');
+                div.className = 'pet-option';
+                div.dataset.id = pet.id; // Guardamos el ID real
+                div.dataset.name = pet.name;
+                div.innerHTML = `
+                    <img src="${pet.photo}" class="pet-thumb" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
+                    <span>${pet.name}</span>
+                `;
+                // LÓGICA BOTÓN GPS (NUEVO)
+            const btnGps = document.getElementById('btnGetGps');
+            const gpsStatus = document.getElementById('gpsStatus');
+            let currentLocation = null; // Variable para guardar coords
+
+            if (btnGps) {
+                btnGps.addEventListener('click', () => {
+                    if (!navigator.geolocation) return alert("GPS no disponible");
+                    
+                    btnGps.innerHTML = "⏳ Obteniendo...";
+                    
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        currentLocation = { 
+                            lat: pos.coords.latitude, 
+                            lng: pos.coords.longitude 
+                        };
+                        
+                        btnGps.innerHTML = "📍 Ubicación Actualizada";
+                        btnGps.style.color = "#16a34a";
+                        if(gpsStatus) gpsStatus.style.display = 'block';
+                        
+                        // Opcional: Rellenar el campo de texto automáticamente
+                        const inputUbi = document.getElementById('lastSeen');
+                        if(inputUbi && !inputUbi.value) {
+                            inputUbi.value = "Ubicación GPS detectada";
+                        }
+
+                    }, (err) => {
+                        alert("Error al obtener ubicación. Asegúrate de permitir el acceso.");
+                        btnGps.innerHTML = "Usar mi ubicación actual";
+                    });
+                });
+            }
+
+            // LÓGICA BOTÓN LANZAR ALERTA (Actualizada con coords)
+            const btnAlert = document.getElementById('btnLanzarAlerta');
+            if(btnAlert) {
+                btnAlert.addEventListener('click', async () => {
+                    // ... (validaciones de selección de mascota) ...
+                    
+                    // Aseguramos que tengamos ubicación (Texto o Coordenadas)
+                    const lastSeen = document.getElementById('lastSeen').value;
+                    if(!lastSeen && !currentLocation) return alert("Indica una ubicación o usa el GPS.");
+
+                    try {
+                        // ... código de envío ...
+                        await addDoc(collection(db, "alerts"), {
+                            // ... otros campos ...
+                            location: currentLocation, // <--- Guardamos las coordenadas reales aquí
+                            lastSeenLocation: lastSeen,
+                            // ...
+                        });
+                        // ...
+                    } catch(err) { console.error(err); }
+                });
+            }
+                // Evento de selección
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.pet-option').forEach(opt => opt.classList.remove('selected'));
+                    div.classList.add('selected');
+                });
+
+                selector.appendChild(div);
+            });
+
+            // LÓGICA DEL BOTÓN LANZAR ALERTA
+            const btnAlert = document.getElementById('btnLanzarAlerta');
+            if(btnAlert) {
+                btnAlert.addEventListener('click', async () => {
+                    const selected = document.querySelector('.pet-option.selected');
+                    const lastSeen = document.getElementById('lastSeen').value;
+                    const extraInfo = document.getElementById('extraInfo').value;
+
+                    if(!selected) return alert("Por favor selecciona qué mascota se perdió.");
+                    if(!lastSeen) return alert("Por favor indica dónde fue vista por última vez.");
+
+                    if(confirm(`¿Confirmar ALERTA para ${selected.dataset.name}?`)) {
+                        try {
+                            btnAlert.disabled = true; 
+                            btnAlert.textContent = "ENVIANDO A LA COMUNIDAD...";
+
+                            // Guardar en colección de alertas
+                            await addDoc(collection(db, "alerts"), {
+                                type: 'LOST',
+                                petId: selected.dataset.id,
+                                petName: selected.dataset.name,
+                                ownerId: userId,
+                                lastSeenLocation: lastSeen,
+                                extraInfo: extraInfo,
+                                timestamp: new Date(),
+                                status: 'active'
+                            });
+
+                            alert("¡ALERTA ENVIADA! La comunidad ha sido notificada.");
+                            window.location.href = 'dashboard.html';
+                        } catch(err) {
+                            console.error(err);
+                            alert("Error al enviar alerta.");
+                            btnAlert.disabled = false;
+                        }
+                    }
+                });
+            }
+
+        } catch (e) { console.error(e); selector.innerHTML = "Error al cargar."; }
     }
 });
 
-// Función Global para Cargar Mascotas (Privado)
-async function loadUserPets(userId) {
-    const grid = document.getElementById('petsContainer');
-    if (!grid) return;
-
-    try {
-        const q = query(collection(db, "pets"), where("ownerId", "==", userId));
-        const snap = await getDocs(q);
-        let list = [];
-
-        const name = localStorage.getItem('pawi_user_name') || "";
-        if (name.toLowerCase().includes('stephanie')) {
-            list.push(
-                { id: 's1', name: 'Max', age: '9 Años', description: 'Husky siberiano, ojos celestes.', photo: 'Max01.png' },
-                { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato gris con blanco.', photo: 'Tommy01.jpeg' }
-            );
-        }
-
-        snap.forEach(d => list.push({ id: d.id, ...d.data() }));
-        grid.innerHTML = list.length ? "" : "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas registradas.</p>";
-
-        list.forEach(p => {
-            const currentUrl = window.location.href;
-            const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-            const fullLink = `${basePath}/encontrado.html?id=${p.id}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
-
-            grid.innerHTML += `
-                <div class="pet-card">
-                    <div class="pet-photo-header"><img src="${p.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'"></div>
-                    <div class="pet-body">
-                        <div class="pet-name">${p.name}</div>
-                        <div class="pet-age">${p.age}</div>
-                        <p class="pet-desc">${p.description}</p>
-                    </div>
-                    <div class="qr-wrapper"><img src="${qrUrl}" class="qr-code"></div>
-                    <div class="card-actions">
-                        <button class="btn-pet btn-edit" onclick="alert('Editar próximamente')">Editar</button>
-                        <button class="btn-pet btn-delete" data-id="${p.id}">Eliminar</button>
-                    </div>
-                </div>`;
-        });
-
-        grid.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = async (e) => {
-                if (confirm("¿Borrar esta mascota?")) {
-                    await deleteDoc(doc(db, "pets", e.target.dataset.id));
-                    location.reload();
-                }
-            };
-        });
-    } catch (e) { console.error("Error cargando mascotas", e); }
-}
-
-// Función Global para Página Pública (Found Page)
+// Función Global para Página Pública (Found Page) - Sin cambios
 async function handleFoundPage() {
     const params = new URLSearchParams(window.location.search);
     const petId = params.get('id');
     const card = document.getElementById('alertCard');
     const loader = document.getElementById('loadingMsg');
 
-    if (!petId) {
-        if(loader) loader.textContent = "Error: Código QR inválido.";
-        return;
-    }
+    if (!petId) return;
 
     try {
         const docRef = doc(db, "pets", petId);
@@ -280,26 +336,20 @@ async function handleFoundPage() {
 
         if (docSnap.exists()) {
             const pet = docSnap.data();
-            
-            // Actualizar elementos del DOM
             const imgEl = document.getElementById('foundPetImg');
             if(imgEl) imgEl.src = pet.photo || "https://cdn-icons-png.flaticon.com/512/616/616408.png";
-            
             const nameEl = document.getElementById('foundPetName');
             if(nameEl) nameEl.textContent = pet.name;
-            
             const descEl = document.getElementById('foundPetDesc');
             if(descEl) descEl.textContent = "Mi descripción es: " + (pet.description || "Sin detalles");
 
             if(loader) loader.style.display = 'none';
             if(card) card.style.display = 'block';
 
-            // Lógica del botón de ubicación (EmailJS)
             const btnLocation = document.getElementById('btnSendLocation');
             if(btnLocation) {
                 btnLocation.addEventListener('click', () => {
                     if (!navigator.geolocation) return alert("Tu navegador no soporta GPS.");
-
                     btnLocation.textContent = "Enviando alerta...";
                     btnLocation.disabled = true;
 
@@ -309,48 +359,53 @@ async function handleFoundPage() {
                         const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
 
                         try {
-                            // 1. Guardar Alerta en Firebase
                             await addDoc(collection(db, "alerts"), {
+                                type: 'FOUND_SCAN',
                                 petId, ownerId: pet.ownerId, petName: pet.name,
                                 location: { lat, lng }, mapsLink: mapLink,
                                 timestamp: new Date(), status: 'unread'
                             });
-
-                            // 2. Enviar Correo (Opcional si tienes EmailJS configurado)
-                            // Si no tienes EmailJS configurado, puedes comentar este bloque
-                            const q = query(collection(db, "users"), where("uid", "==", pet.ownerId));
-                            const querySnapshot = await getDocs(q);
-                            
-                            if (!querySnapshot.empty) {
-                                const ownerData = querySnapshot.docs[0].data();
-                                const emailParams = {
-                                    to_name: ownerData.fullName || "Dueño",
-                                    to_email: ownerData.email,
-                                    pet_name: pet.name,
-                                    map_link: mapLink,
-                                    time: new Date().toLocaleString()
-                                };
-                                // Reemplaza con tus IDs reales de EmailJS
-                                // await emailjs.send('service_ID', 'template_ID', emailParams);
-                            }
-                            
                             alert("¡Ubicación enviada al dueño!");
                             btnLocation.style.display = 'none';
                             const statusEl = document.getElementById('locationStatus');
                             if(statusEl) statusEl.style.display = 'block';
-
-                        } catch (err) {
-                            console.error(err);
-                            alert("Ubicación guardada, pero hubo un error enviando la notificación.");
-                        }
+                        } catch (err) { alert("Error enviando notificación."); }
                     });
                 });
             }
-        } else {
-            if(loader) loader.textContent = "Mascota no encontrada en el sistema.";
         }
-    } catch (error) { 
-        console.error(error);
-        if(loader) loader.textContent = "Error de conexión.";
-    }
+    } catch (error) { console.error(error); }
+}
+
+// Función Cargar Mascotas (Dashboard) - Sin cambios
+async function loadUserPets(userId) {
+    const grid = document.getElementById('petsContainer');
+    if (!grid) return;
+    try {
+        const q = query(collection(db, "pets"), where("ownerId", "==", userId));
+        const snap = await getDocs(q);
+        let list = [];
+        const name = localStorage.getItem('pawi_user_name') || "";
+        if (name.toLowerCase().includes('stephanie')) {
+            list.push({ id: 's1', name: 'Max', age: '9 Años', description: 'Husky...', photo: 'Max01.png' }, { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato...', photo: 'Tommy01.jpeg' });
+        }
+        snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+        grid.innerHTML = list.length ? "" : "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas.</p>";
+        list.forEach(p => {
+            const qrLink = `${window.location.href.substring(0, window.location.href.lastIndexOf('/'))}/encontrado.html?id=${p.id}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrLink)}`;
+            grid.innerHTML += `
+                <div class="pet-card">
+                    <div class="pet-photo-header"><img src="${p.photo}"></div>
+                    <div class="pet-body"><div class="pet-name">${p.name}</div><div class="pet-age">${p.age}</div><p class="pet-desc">${p.description}</p></div>
+                    <div class="qr-wrapper"><img src="${qrUrl}" class="qr-code"></div>
+                    <div class="card-actions"><button class="btn-pet btn-delete" data-id="${p.id}">Eliminar</button></div>
+                </div>`;
+        });
+        grid.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = async (e) => {
+                if (confirm("¿Borrar?")) { await deleteDoc(doc(db, "pets", e.target.dataset.id)); location.reload(); }
+            };
+        });
+    } catch (e) { console.error(e); }
 }

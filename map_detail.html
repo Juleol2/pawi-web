@@ -3,185 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAWI - Mapa Interactivo</title>
+    <title>PAWI - Zonas Seguras</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; color: #333; }
+        body { background-color: #f4f6f8; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* --- NAVBAR (Estandarizado) --- */
+        /* --- NAVBAR --- */
         .navbar {
             background-color: #ffffff;
             height: 80px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             padding: 0 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 100;
+            margin-bottom: 20px;
         }
-        
-        .nav-left { display: flex; align-items: center; gap: 20px; }
-
-        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-        .logo-img { height: 45px; width: auto; } 
-        .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
-
-        /* Botones Navbar */
-        .nav-icon-btn {
-            font-size: 22px; text-decoration: none; color: #555;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8;
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-img { height: 40px; width: auto; }
+        .logo-text-img { height: 28px; width: auto; margin-top: 4px; }
+        .back-link { 
+            margin-left: auto; text-decoration: none; color: #666; font-weight: 600; 
+            display: flex; align-items: center; gap: 5px; transition: 0.2s;
         }
-        .nav-icon-btn:hover { transform: scale(1.1); background-color: #FFF0E6; color: #F59E2D; }
-        
-        /* Flecha SVG */
-        .back-btn svg { stroke: #555; transition: stroke 0.2s; }
-        .back-btn:hover svg { stroke: #F59E2D; }
-
-        .nav-links { display: flex; align-items: center; gap: 15px; }
-
-        .nav-user-badge {
-            display: flex; align-items: center; gap: 8px;
-            background-color: #FFF0E6; padding: 8px 15px; border-radius: 30px;
-            color: #F59E2D; font-weight: 700; font-size: 14px; white-space: nowrap;
-            cursor: pointer; transition: all 0.2s ease;
-        }
+        .back-link:hover { color: #F59E2D; }
 
         /* --- CONTENEDOR PRINCIPAL --- */
-        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
-        
-        /* Tarjeta Grande del Mapa */
-        .map-detail-card {
-            background-color: white; width: 100%; max-width: 1100px; border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 20px 40px 20px;
+            flex: 1;
         }
 
-        /* Cabecera de la tarjeta */
-        .map-header-section {
-            padding: 30px 40px; border-bottom: 1px solid #eee; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .map-heading h2 { font-size: 28px; font-weight: 800; color: #1F2937; }
-        .map-heading p { font-size: 15px; color: #666; margin-top: 5px; }
+        .header-section { margin-bottom: 25px; }
+        .header-section h1 { font-size: 26px; font-weight: 800; color: #111; }
+        .header-section p { font-size: 14px; color: #666; margin-top: 5px; }
 
-        /* --- CONTENEDOR DEL IFRAME (MAPA INTERACTIVO) --- */
-        .map-frame-container {
+        /* --- TARJETA DEL MAPA --- */
+        .map-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+
+        /* Área del Iframe */
+        .map-wrapper {
             width: 100%;
             height: 500px; /* Altura del mapa */
-            background-color: #eee;
+            background-color: #e5e7eb;
             position: relative;
         }
-        
-        .map-iframe {
-            width: 100%; height: 100%; border: 0;
+        .map-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
-        /* Leyenda de Colores */
-        .legend-section { padding: 30px 40px; background-color: #fff; }
-        .legend-title { font-size: 13px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
-        
-        .legend-grid { display: flex; gap: 40px; flex-wrap: wrap; }
-        
-        .legend-item { display: flex; align-items: center; gap: 12px; }
-        .color-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        /* Colores de la marca */
-        .dot-orange { background-color: #F59E2D; }
-        .dot-blue { background-color: #12009E; }
-        .dot-green { background-color: #10B981; }
+        /* --- LEYENDA --- */
+        .legend-section {
+            padding: 25px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+        }
 
-        .legend-label { font-size: 15px; font-weight: 600; color: #444; }
+        .legend-title {
+            font-size: 14px; font-weight: 700; color: #9ca3af; 
+            text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;
+        }
 
-        /* Footer */
-        .footer { background-color: #1F2937; color: white; padding: 40px; text-align: center; margin-top: auto; }
-        .footer-address { font-size: 18px; font-weight: 600; }
-        .footer-contact { font-size: 16px; color: #ccc; }
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .navbar { padding: 0 20px; }
-            .map-header-section { flex-direction: column; text-align: center; gap: 10px; }
-            .legend-grid { gap: 20px; flex-direction: column; }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background-color: #f9fafb;
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+        }
+        .legend-item:hover { transform: translateY(-2px); border-color: #F59E2D; }
+
+        /* Círculos de color */
+        .color-dot {
+            width: 20px; height: 20px; border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+
+        /* Definición de colores para coincidir con el mapa */
+        .bg-orange { background-color: #F59E2D; }
+        .bg-blue { background-color: #1e40af; }
+        .bg-green { background-color: #10b981; }
+
+        .legend-info h4 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 2px; }
+        .legend-info p { font-size: 12px; color: #666; margin: 0; }
+
+        /* FOOTER */
+        .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; margin-top: auto; }
+
+        @media (max-width: 768px) {
+            .map-wrapper { height: 350px; }
+            .legend-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-   <nav class="navbar">
-    <div class="nav-left">
-        <a href="pet_map.html" class="nav-icon-btn back-btn" title="Volver">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-        </a>
-        
+    <nav class="navbar">
         <a href="dashboard.html" class="nav-logo">
             <img src="logoImagen.png" alt="Logo" class="logo-img">
             <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
         </a>
-    </div>
-
-    <div class="nav-links">
-        <div class="nav-user-badge">
-            <span>👤 <span id="navUserName">Stephanie</span></span>
-        </div>
-    </div>
-</nav>
+        <a href="dashboard.html" class="back-link">
+            <span>← Volver</span>
+        </a>
+    </nav>
 
     <div class="container">
-        <div class="map-detail-card">
-            
-            <div class="map-header-section">
-                <div class="map-heading">
-                    <h2>Zonas Seguras</h2>
-                    <p>Visualiza las áreas verificadas y colores de seguridad en tu sector.</p>
-                </div>
-            </div>
+        <div class="header-section">
+            <h1>Zonas Seguras</h1>
+            <p>Visualiza las áreas verificadas y niveles de seguridad en tu sector.</p>
+        </div>
 
-            <div class="map-frame-container">
+        <div class="map-card">
+            <div class="map-wrapper">
                 <iframe 
-                    class="map-iframe"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.07725833458!2d-79.96796674999999!3d-2.152829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x902d6dcf9f9d257d%3A0x6335123986963422!2sGuayaquil!5e0!3m2!1sen!2sec!4v1700000000000!5m2!1sen!2sec" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
+                    src="https://www.google.com/maps/d/embed?mid=1JgjlhX9XYLxr98kGFyFjkYUZbqk6blA&ehbc=2E312F&noprof=1" 
+                    width="640" 
+                    height="480">
                 </iframe>
             </div>
 
             <div class="legend-section">
-                <div class="legend-title">Leyenda de Colores (Referencial)</div>
+                <div class="legend-title">Leyenda de Colores</div>
+                
                 <div class="legend-grid">
-                    
                     <div class="legend-item">
-                        <div class="color-dot dot-orange"></div>
-                        <span class="legend-label">Parroquia Febres Cordero</span>
+                        <div class="color-dot bg-orange"></div>
+                        <div class="legend-info">
+                            <h4>Parroquia Febres Cordero</h4>
+                            <p>Zona monitoreada por la comunidad.</p>
+                        </div>
                     </div>
 
                     <div class="legend-item">
-                        <div class="color-dot dot-blue"></div>
-                        <span class="legend-label">Parroquia Tarqui</span>
+                        <div class="color-dot bg-blue"></div>
+                        <div class="legend-info">
+                            <h4>Parroquia Tarqui</h4>
+                            <p>Reportes frecuentes de mascotas.</p>
+                        </div>
                     </div>
 
                     <div class="legend-item">
-                        <div class="color-dot dot-green"></div>
-                        <span class="legend-label">Zonas de Parques Seguros</span>
+                        <div class="color-dot bg-green"></div>
+                        <div class="legend-info">
+                            <h4>Zonas de Parques Seguros</h4>
+                            <p>Áreas verdes cerradas y seguras.</p>
+                        </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 
     <footer class="footer">
-        <div class="footer-content">
-            <p class="footer-address">📍 Dirección en Guayaquil, Ecuador</p>
-            <p class="footer-contact">📞 Contacto: 0993919389</p>
-            <p style="font-size: 12px; margin-top: 20px; color: #888;">© 2025 PAWI - Todos los derechos reservados.</p>
-        </div>
+        <p style="font-size: 13px;">📍 Guayaquil, Ecuador | © 2025 PAWI</p>
     </footer>
 
-    <script type="module" src="main.js"></script>
 </body>
 </html>

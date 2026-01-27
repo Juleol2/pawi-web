@@ -51,7 +51,9 @@
         /* SELECCIÓN DE MASCOTA */
         .section-title { font-size: 14px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
         
-        .pet-selector { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        /* AQUÍ INYECTAREMOS LAS MASCOTAS */
+        .pet-selector { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        
         .pet-option {
             cursor: pointer; text-align: center; transition: 0.3s;
             padding: 15px; border-radius: 20px; border: 2px solid transparent; width: 120px;
@@ -105,7 +107,89 @@
         }
 
         .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; margin-top: auto; }
+/* ESTILOS DEL SELECTOR DE UBICACIÓN */
+        .location-picker-container {
+            position: relative;
+            width: 100%;
+            height: 300px; /* Altura del mapa */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #fff;
+        }
 
+        .map-background {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* El Pin Central Fijo */
+        .center-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%); /* Centra la punta del pin */
+            pointer-events: none; /* Permite arrastrar el mapa a través del pin */
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .center-pin img {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3));
+            animation: bounce-pin 1s infinite alternate;
+        }
+
+        .pin-shadow {
+            width: 10px;
+            height: 4px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            margin-top: -2px;
+            animation: shadow-scale 1s infinite alternate;
+        }
+
+        @keyframes bounce-pin { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+        @keyframes shadow-scale { from { transform: scale(1); opacity: 0.5; } to { transform: scale(0.8); opacity: 0.2; } }
+
+        /* Botón de GPS Flotante */
+        .btn-my-location {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 20;
+            transition: 0.2s;
+        }
+        .btn-my-location:hover { background-color: #f0fdf4; color: #16a34a; transform: translateX(-50%) scale(1.05); }
+        
+        .gps-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -132,34 +216,55 @@
             </div>
 
             <div class="section-title">¿Quién se perdió?</div>
-            <div class="pet-selector">
-                <div class="pet-option selected" onclick="selectPet(this)">
-                    <img src="Max01.png" class="pet-thumb" alt="Max" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
-                    <span>Max</span>
-                </div>
-                <div class="pet-option" onclick="selectPet(this)">
-                    <img src="Tommy01.jpeg" class="pet-thumb" alt="Tommy" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616430.png'">
-                    <span>Tommy</span>
-                </div>
+            
+            <div class="pet-selector" id="alertPetSelector">
+                <p>Cargando tus mascotas...</p>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Última vez visto en:</label>
-                <input type="text" class="form-input" placeholder="Ej: Av. Las Aguas, cerca del parque...">
+                <input type="text" id="lastSeen" class="form-input" placeholder="Ej: Av. Las Aguas, cerca del parque...">
             </div>
 
-            <div class="section-title">Punto en el mapa</div>
-            <div class="map-mini">
-                <img src="https://img.freepik.com/premium-vector/city-map-navigation-smartphone-with-pointers_349999-281.jpg?w=740" alt="Mapa">
-                <div class="map-marker">📍</div>
+
+            <div class="section-title">Punto exacto del reporte</div>
+            
+            <div class="location-picker-container">
+                <iframe 
+                    class="map-background"
+                    src="https://www.google.com/maps/d/embed?mid=1JgjlhX9XYLxr98kGFyFjkYUZbqk6blA&ehbc=2E312F&noprof=1" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+
+                <div class="center-pin">
+                    <img src="https://cdn-icons-png.flaticon.com/512/447/447031.png" alt="Puntero">
+                    <div class="pin-shadow"></div>
+                </div>
+
+                <button type="button" class="btn-my-location" id="btnGetGps">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    Usar mi ubicación actual
+                </button>
+
+                <div class="gps-status" id="gpsStatus" style="display: none;">
+                    ✅ Coordenadas guardadas
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p style="font-size: 11px; color: #888; text-align: center; margin-top: 5px;">
+                    * Mueve el mapa para referencia visual o usa el botón para enviar tu ubicación exacta.
+                </p>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Información adicional (Opcional):</label>
-                <textarea class="form-input" rows="2" placeholder="Ej: No tiene collar, es muy asustadizo..."></textarea>
+                <textarea id="extraInfo" class="form-input" rows="2" placeholder="Ej: No tiene collar, es muy asustadizo..."></textarea>
             </div>
 
-            <button class="btn-activate" onclick="lanzarAlerta()">¡LANZAR ALERTA AHORA!</button>
+            <button id="btnLanzarAlerta" class="btn-activate">¡LANZAR ALERTA AHORA!</button>
         </div>
     </div>
 
@@ -167,19 +272,6 @@
         <p style="font-size: 13px;">📍 Guayaquil, Ecuador | © 2025 PAWI</p>
     </footer>
 
-    <script>
-        function selectPet(element) {
-            document.querySelectorAll('.pet-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-        }
-
-        function lanzarAlerta() {
-            const pet = document.querySelector('.pet-option.selected span').innerText;
-            if(confirm(`¿Estás seguro de lanzar la alerta para ${pet}? Se notificará a todos los usuarios cercanos.`)) {
-                alert(`¡ALERTA ACTIVADA! La comunidad ha sido notificada sobre ${pet}. Mantente cerca de tu teléfono.`);
-                window.location.href = 'dashboard.html';
-            }
-        }
-    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
