@@ -236,8 +236,11 @@ async function loadUserPets(userId) {
 
         petsList.forEach(pet => {
             // Generar URL para QR (apunta a encontrado.html)
-            const qrLink = `${window.location.origin}/encontrado.html?id=${pet.id}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrLink)}`;
+            // ESTA ES LA SOLUCIÓN:
+// Obtenemos la ruta completa actual y le quitamos el nombre del archivo (mis_mascotas.html)
+const currentUrl = window.location.href;
+const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+const qrLink = `${basePath}/encontrado.html?id=${pet.id}`;
             
             grid.innerHTML += `
                 <div class="pet-card">
@@ -269,4 +272,5 @@ async function loadUserPets(userId) {
         console.error(err);
         grid.innerHTML = "<p>Error al cargar las mascotas.</p>"; 
     }
+
 }
