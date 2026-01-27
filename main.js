@@ -37,12 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ---------------------------------------------------------
-    // 2. LÓGICA DE REGISTRO DE USUARIO (SIGNUP) - ¡AQUÍ ESTABA EL ERROR!
+    // 2. LÓGICA DE REGISTRO DE USUARIO (SIGNUP)
     // ---------------------------------------------------------
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // <--- ESTO EVITA LA RECARGA DE PÁGINA
+            e.preventDefault();
 
             const nombre = document.getElementById('signupName').value;
             const email = document.getElementById('signupEmail').value;
@@ -56,10 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSubmit.disabled = true;
                 btnSubmit.textContent = "Creando cuenta...";
 
-                // 1. Crear en Auth
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
-                // 2. Guardar en Base de Datos (Firestore)
                 const fullNameCap = nombre.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
                 
                 await addDoc(collection(db, "users"), {
@@ -70,7 +68,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     createdAt: new Date()
                 });
 
-                // 3. Guardar nombre localmente para rapidez
                 localStorage.setItem('pawi_user_name', fullNameCap);
 
                 alert("¡Cuenta creada! Bienvenido.");
@@ -105,7 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 
-                // Buscar nombre para guardar en localStorage
                 const q = query(collection(db, "users"), where("uid", "==", userCredential.user.uid));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
@@ -135,7 +131,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btn.disabled = true;
                 btn.textContent = "Guardando...";
                 
-                // Si no hay foto, usar una por defecto
                 const photoSrc = previewImg ? previewImg.src : "https://cdn-icons-png.flaticon.com/512/616/616408.png";
 
                 await addDoc(collection(db, "pets"), {
@@ -163,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const logoutBtns = document.querySelectorAll('.logout-btn, a[href="login.html"]');
     logoutBtns.forEach(btn => {
         btn.addEventListener('click', async (e) => {
-            e.preventDefault(); // Importante para no seguir el link
+            e.preventDefault();
             localStorage.removeItem('pawi_user_name');
             await signOut(auth);
             window.location.href = 'login.html';
@@ -190,18 +185,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const firstName = fullName.split(' ')[0];
                 localStorage.setItem('pawi_user_name', fullName);
 
-                // Inyectar nombres en el HTML si existen los elementos
                 if (welcomeName) welcomeName.textContent = firstName;
                 if (navUserName) navUserName.textContent = fullName;
                 if (displayUserName) displayUserName.textContent = fullName;
                 
-                // Configuración Foro
                 if (forumAvatar) forumAvatar.textContent = fullName.charAt(0).toUpperCase();
                 if (forumPlaceholder) forumPlaceholder.placeholder = `¿Qué estás pensando, ${firstName}?`;
             }
         } catch (e) { console.error("Error UI:", e); }
 
-        // Cargar datos según la página donde estemos
         if (document.getElementById('petsContainer')) loadUserPets(user.uid);
         if (document.getElementById('petSelect')) loadPetsForCollar(user.uid);
     }
@@ -217,7 +209,6 @@ async function loadUserPets(userId) {
         const snap = await getDocs(q);
         let list = [];
 
-        // Recuperar lógica de Stephanie (Max y Tommy)
         const name = localStorage.getItem('pawi_user_name') || "";
         if (name.toLowerCase().includes('stephanie')) {
             list.push(
@@ -230,14 +221,10 @@ async function loadUserPets(userId) {
         grid.innerHTML = list.length ? "" : "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas registradas.</p>";
 
         list.forEach(p => {
-            // --- CORRECCIÓN DEL LINK DEL QR ---
-            // Esto asegura que si estás en /pawi-app/, el link incluya /pawi-app/
             const currentUrl = window.location.href;
             const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
             const fullLink = `${basePath}/encontrado.html?id=${p.id}`;
-            
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
-            // ----------------------------------
 
             grid.innerHTML += `
                 <div class="pet-card">
@@ -258,18 +245,6 @@ async function loadUserPets(userId) {
         // Eventos de eliminación
         grid.querySelectorAll('.btn-delete').forEach(btn => {
             btn.onclick = async (e) => {
-                if (confirm("¿Borrar esta mascota?")) {
-                    await deleteDoc(doc(db, "pets", e.target.dataset.id));
-                    location.reload();
-                }
-            };
-        });
-    } catch (e) { console.error("Error cargando mascotas", e); }
-}
-
-        // Activar botones de eliminar
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = async (e) => {
                 if (confirm("¿Seguro que quieres eliminar esta mascota?")) {
                     await deleteDoc(doc(db, "pets", e.target.dataset.id));
                     location.reload();
@@ -277,10 +252,8 @@ async function loadUserPets(userId) {
             };
         });
 
-    } catch (err) { 
-        console.error(err);
-        grid.innerHTML = "<p>Error al cargar las mascotas.</p>"; 
+    } catch (e) { 
+        console.error("Error cargando mascotas", e); 
+        grid.innerHTML = "<p>Error al cargar las mascotas.</p>";
     }
-
 }
-
