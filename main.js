@@ -1,11 +1,11 @@
 import { auth, db } from './firebase.js';
 import { collection, addDoc, getDocs, getDoc, query, where, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const storage = getStorage();
 
-// Variables Globales para GPS
+// Variables Globales
 let coordenadasReporte = { lat: -2.14, lng: -79.96 }; 
 let coordenadasAlertaDueño = null;
 
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const user = await checkAuth();
     const path = window.location.pathname;
-    // Agregamos 'admin_reportes' si es necesaria protección
     const paginasProtegidas = ['dashboard', 'mis_mascotas', 'registro_mascota', 'foro', 'collar', 'personaliza', 'generar_alerta'];
     const necesitaLogin = paginasProtegidas.some(p => path.includes(p));
 
@@ -75,10 +74,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const fullNameCap = nombre.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
                 
+                // Guardar usuario en Firestore
                 await addDoc(collection(db, "users"), {
                     uid: userCredential.user.uid,
                     fullName: fullNameCap,
-                    email: email,
+                    email: email, // GUARDAMOS EL EMAIL AQUÍ PARA USARLO LUEGO
                     userType: tipo,
                     createdAt: new Date()
                 });
@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const snap = await getDocs(q);
             let list = [];
 
+            // Lógica Stephanie (Hardcoded por petición anterior)
             const name = localStorage.getItem('pawi_user_name') || "";
             if (name.toLowerCase().includes('stephanie')) {
                 list.push({ id: 's1', name: 'Max', age: '9 Años', description: 'Husky...', photo: 'Max01.png' }, { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato...', photo: 'Tommy01.jpeg' });
@@ -237,7 +238,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const fullLink = `${basePath}/encontrado.html?id=${p.id}`;
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
 
-            // DISEÑO CORREGIDO: Tarjeta Blanca, Nombre Naranja, Botones Estilizados
             grid.innerHTML += `
                 <div class="pet-card" style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #f0f0f0;">
                     <div style="width: 100%; height: 160px; overflow: hidden; border-radius: 12px; margin-bottom: 12px;">
@@ -298,6 +298,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const q = query(collection(db, "pets"), where("ownerId", "==", userId));
             const snap = await getDocs(q);
             let list = [];
+            
+            // Hardcode Stephanie
             const name = localStorage.getItem('pawi_user_name') || "";
             if (name.toLowerCase().includes('stephanie')) {
                 list.push({ id: 's1', name: 'Max', photo: 'Max01.png', breed: 'Husky' }, { id: 's2', name: 'Tommy', photo: 'Tommy01.jpeg', breed: 'Gato' });
@@ -310,7 +312,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // Crear selector visual
             list.forEach(pet => {
                 const div = document.createElement('div');
                 div.className = 'pet-option';
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 selector.appendChild(div);
             });
 
-            // Lógica GPS Botón (Lanzar Alerta)
+            // GPS
             const btnGps = document.getElementById('btnGetGps');
             if (btnGps) {
                 btnGps.addEventListener('click', () => {
@@ -341,16 +342,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 btnGps.style.backgroundColor = "#dcfce7";
                                 btnGps.style.color = "#16a34a";
                             }, 
-                            (error) => {
-                                alert("No se pudo obtener la ubicación.");
-                                btnGps.innerHTML = "❌ Error GPS";
-                            }
+                            (error) => { alert("No se pudo obtener la ubicación."); btnGps.innerHTML = "❌ Error GPS"; }
                         );
                     }
                 });
             }
 
-            // Lógica Botón FINAL (Guardar en Firebase)
+            // Lanzar Alerta
             const btnAlert = document.getElementById('btnLanzarAlerta');
             if(btnAlert) {
                 btnAlert.addEventListener('click', async () => {
@@ -358,39 +356,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const lastSeen = document.getElementById('lastSeen').value;
                     const extraInfo = document.getElementById('extraInfo').value;
 
-                    if(!selected) return alert("Por favor, selecciona qué mascota se perdió.");
-                    if(!lastSeen) return alert("Indica dónde fue vista por última vez.");
+                    if(!selected) return alert("Selecciona una mascota.");
+                    if(!lastSeen) return alert("Indica una ubicación.");
 
-                    // Simulamos color de placa para el Admin Panel
                     const colores = ['Verde', 'Rosado', 'Azul', 'Rojo'];
                     const colorPlaca = colores[Math.floor(Math.random() * colores.length)]; 
 
                     try {
                         btnAlert.disabled = true; btnAlert.textContent = "PUBLICANDO...";
-                        
                         await addDoc(collection(db, "alerts"), {
-                            // Para el Foro
                             authorName: localStorage.getItem('pawi_user_name') || "Usuario PAWI",
                             ownerEmail: auth.currentUser.email,
                             petName: selected.dataset.name,
                             petPhoto: selected.querySelector('img').src,
                             content: extraInfo || `¡Ayuda! ${selected.dataset.name} se ha perdido.`,
                             lastSeenLocation: lastSeen,
-                            
-                            // Para el Admin Panel
                             placaColor: colorPlaca,
-                            gps: coordenadasAlertaDueño || { lat: -2.14, lng: -79.96 }, // Default si no hay GPS
-                            
+                            gps: coordenadasAlertaDueño || { lat: -2.14, lng: -79.96 },
                             status: 'active',
                             ownerId: userId,
                             timestamp: new Date().toISOString()
                         });
-                        
-                        alert("¡Alerta enviada a la comunidad!");
+                        alert("¡Alerta enviada!");
                         window.location.href = 'foro.html';
                     } catch(err) { 
-                        console.error(err); alert("Error."); 
-                        btnAlert.disabled = false; btnAlert.textContent = "¡LANZAR ALERTA AHORA!";
+                        console.error(err); alert("Error."); btnAlert.disabled = false; btnAlert.textContent = "LANZAR ALERTA";
                     }
                 });
             }
@@ -402,9 +392,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // FUNCIONES EXTERNAS (Scope Global)
 // =========================================================
 
-// Lógica de Reporte Público (reporte.html)
 function handlePublicReport(form) {
-    // 1. Botón GPS
     const btnLocation = document.getElementById('btnGetLocation');
     if (btnLocation) {
         btnLocation.addEventListener('click', () => {
@@ -425,7 +413,6 @@ function handlePublicReport(form) {
         });
     }
 
-    // 2. Enviar Formulario
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const colorInput = document.querySelector('input[name="tagColor"]:checked');
@@ -444,11 +431,8 @@ function handlePublicReport(form) {
                 petPhoto: 'https://cdn-icons-png.flaticon.com/512/616/616408.png',
                 content: descripcion,
                 lastSeenLocation: "Reportado vía GPS Público",
-                
-                // Datos Admin
                 placaColor: colorInput ? colorInput.value : "Desconocido",
                 gps: coordenadasReporte,
-                
                 status: 'active',
                 timestamp: new Date().toISOString()
             });
@@ -459,7 +443,9 @@ function handlePublicReport(form) {
     });
 }
 
-// Lógica de QR Escaneado (Encontrado)
+// -------------------------------------------------------------
+// AQUÍ ESTÁ LA LÓGICA CORREGIDA DEL EMAIL (HANDLE FOUND PAGE)
+// -------------------------------------------------------------
 async function handleFoundPage() {
     const params = new URLSearchParams(window.location.search);
     const petId = params.get('id');
@@ -487,27 +473,69 @@ async function handleFoundPage() {
             const btnLocation = document.getElementById('btnSendLocation');
             if(btnLocation) {
                 btnLocation.addEventListener('click', () => {
-                    if (!navigator.geolocation) return alert("Tu navegador no soporta GPS.");
-                    btnLocation.textContent = "Enviando alerta...";
+                    if (!navigator.geolocation) return alert("Activa tu GPS para enviar la ubicación.");
+                    
+                    btnLocation.textContent = "Enviando alerta y correo...";
                     btnLocation.disabled = true;
 
                     navigator.geolocation.getCurrentPosition(async (position) => {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
+                        const mapLink = `http://maps.google.com/maps?q=${lat},${lng}`;
+
                         try {
-                            // Enviamos alerta tipo FOUND_SCAN
+                            // 1. BUSCAR EL EMAIL DEL DUEÑO
+                            // Necesitamos consultar la colección 'users' usando pet.ownerId
+                            let ownerEmail = "admin@pawi.com"; // Fallback
+                            let ownerName = "Usuario";
+
+                            if (pet.ownerId) {
+                                const qUser = query(collection(db, "users"), where("uid", "==", pet.ownerId));
+                                const userSnap = await getDocs(qUser);
+                                if (!userSnap.empty) {
+                                    const userData = userSnap.docs[0].data();
+                                    ownerEmail = userData.email;
+                                    ownerName = userData.fullName;
+                                }
+                            }
+
+                            // 2. ENVIAR CORREO CON EMAILJS
+                            // Asegúrate de que los nombres de variables coinciden con tu template de EmailJS
+                            const templateParams = {
+                                to_email: ownerEmail,
+                                to_name: ownerName,
+                                pet_name: pet.name,
+                                google_maps_link: mapLink,
+                                message: "¡Se ha escaneado el código QR de tu mascota! Revisa la ubicación."
+                            };
+
+                            // REEMPLAZA CON TUS DATOS REALES DE EMAILJS
+                            await emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', templateParams);
+                            console.log("Correo enviado a:", ownerEmail);
+
+                            // 3. GUARDAR ALERTA EN FIREBASE (Como respaldo)
                             await addDoc(collection(db, "alerts"), {
                                 type: 'FOUND_SCAN',
-                                petId, ownerId: pet.ownerId, petName: pet.name,
+                                petId, 
+                                ownerId: pet.ownerId, 
+                                petName: pet.name,
                                 location: { lat, lng },
                                 content: "¡Alguien escaneó el código QR!",
-                                timestamp: new Date().toISOString(), status: 'unread'
+                                timestamp: new Date().toISOString(), 
+                                status: 'unread'
                             });
-                            alert("¡Ubicación enviada al dueño!");
+
+                            alert("¡Ubicación enviada exitosamente al dueño!");
                             btnLocation.style.display = 'none';
                             const statusEl = document.getElementById('locationStatus');
                             if(statusEl) statusEl.style.display = 'block';
-                        } catch (err) { alert("Error."); }
+
+                        } catch (err) { 
+                            console.error("Error al procesar:", err);
+                            alert("Hubo un error al enviar la notificación. Intenta de nuevo.");
+                            btnLocation.disabled = false;
+                            btnLocation.textContent = "Enviar ubicación de nuevo";
+                        }
                     });
                 });
             }
