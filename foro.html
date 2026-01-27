@@ -6,126 +6,61 @@
     <title>PAWI - Foro Comunitario</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ESTILOS (Mantenemos los mismos de antes) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: #f4f6f8; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* --- NAVBAR --- */
-        .navbar {
-            background-color: #ffffff;
-            height: 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 100;
-        }
-        
+        /* NAVBAR */
+        .navbar { background-color: #ffffff; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-left { display: flex; align-items: center; gap: 20px; }
-
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
         .logo-img { height: 45px; width: auto; } 
         .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
-
-        /* Botones de icono en navbar */
-        .nav-icon-btn {
-            font-size: 22px; text-decoration: none; color: #555;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8;
-        }
+        .nav-icon-btn { font-size: 22px; text-decoration: none; color: #555; transition: all 0.2s; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: #f4f6f8; }
         .nav-icon-btn:hover { transform: scale(1.1); background-color: #FFF0E6; color: #F59E2D; }
-        
-        /* Flecha de regreso (SVG) */
         .back-btn svg { stroke: #555; transition: stroke 0.2s; }
         .back-btn:hover svg { stroke: #F59E2D; }
-
-        /* --- BOTÓN ALERTA CON ANIMACIÓN --- */
-        .alert-btn { 
-            color: #dc2626; 
-            background-color: #fef2f2;
-            /* Aquí está la animación agregada: */
-            animation: pulse-red 2s infinite;
-        }
+        .alert-btn { color: #dc2626; background-color: #fef2f2; animation: pulse-red 2s infinite; }
         .alert-btn:hover { background-color: #fee2e2; color: #b91c1c; }
-
-        /* Definición de la animación de pulso */
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-        }
-
-        .logout-btn:hover { color: #dc2626; background-color: #fef2f2; }
-        
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
         .nav-links { display: flex; align-items: center; gap: 15px; }
-
-        .nav-user-badge {
-            display: flex; align-items: center; gap: 8px;
-            background-color: #FFF0E6; padding: 8px 15px; border-radius: 30px;
-            color: #F59E2D; font-weight: 700; font-size: 14px; white-space: nowrap;
-            cursor: pointer; transition: all 0.2s ease;
-        }
+        .nav-user-badge { display: flex; align-items: center; gap: 8px; background-color: #FFF0E6; padding: 8px 15px; border-radius: 30px; color: #F59E2D; font-weight: 700; font-size: 14px; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; }
         .nav-user-badge:hover { background-color: #F59E2D; color: white; }
 
-        /* --- LAYOUT DEL FORO --- */
-        .forum-container {
-            max-width: 1200px; margin: 30px auto; width: 100%; padding: 0 20px;
-            display: grid; grid-template-columns: 250px 1fr 300px; gap: 30px; align-items: start;
-        }
-
-        /* SIDEBAR LEFT */
+        /* LAYOUT */
+        .forum-container { max-width: 1200px; margin: 30px auto; width: 100%; padding: 0 20px; display: grid; grid-template-columns: 250px 1fr 300px; gap: 30px; align-items: start; }
         .sidebar-left { background: transparent; display: flex; flex-direction: column; gap: 10px; position: sticky; top: 100px; }
-        .menu-item { 
-            display: flex; align-items: center; gap: 15px; padding: 15px; 
-            color: #666; text-decoration: none; font-weight: 600; border-radius: 15px; transition: 0.2s; cursor: pointer;
-        }
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px; color: #666; text-decoration: none; font-weight: 600; border-radius: 15px; transition: 0.2s; cursor: pointer; }
         .menu-item:hover, .menu-item.active { background-color: white; color: #F59E2D; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .menu-item.active { border-left: 4px solid #F59E2D; }
         .menu-icon { font-size: 20px; width: 30px; text-align: center; }
-
-        /* FEED CENTER */
-        .feed-center { display: flex; flex-direction: column; gap: 20px; }
-
-        .create-post-card { 
-            background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
-            display: flex; gap: 15px; align-items: flex-start; 
-        }
-        .user-avatar { width: 50px; height: 50px; background-color: #1F2937; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; object-fit: cover; flex-shrink: 0; }
         
+        .feed-center { display: flex; flex-direction: column; gap: 20px; }
+        
+        /* Crear Post */
+        .create-post-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; gap: 15px; align-items: flex-start; }
+        .user-avatar { width: 50px; height: 50px; background-color: #1F2937; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; object-fit: cover; flex-shrink: 0; }
         .post-input-container { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .post-input { 
-            width: 100%; background-color: #f4f6f8; border: 1px solid transparent; 
-            padding: 15px; border-radius: 15px; outline: none; transition: 0.2s; resize: none; font-family: inherit;
-        }
+        .post-input { width: 100%; background-color: #f4f6f8; border: 1px solid transparent; padding: 15px; border-radius: 15px; outline: none; transition: 0.2s; resize: none; font-family: inherit; }
         .post-input:focus { background-color: white; border-color: #F59E2D; }
-
-        .post-submit-btn {
-            align-self: flex-end; background-color: #F59E2D; color: white; border: none;
-            padding: 8px 25px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: background-color 0.2s;
-        }
-        .post-submit-btn:hover { background-color: #e08e20; }
-
-        /* ESTILOS DE POST */
+        .post-submit-btn { align-self: flex-end; background-color: #F59E2D; color: white; border: none; padding: 8px 25px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: background-color 0.2s; }
+        
+        /* POSTS */
         .post-card { background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; }
         .post-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
         .post-author { font-weight: 700; color: #111; }
-        .post-role { font-size: 11px; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 10px; margin-left: 5px; font-weight: 600; }
         .post-time { font-size: 12px; color: #999; }
         .post-content { padding: 0 20px 20px; color: #444; line-height: 1.5; }
         .post-img { width: 100%; height: 350px; object-fit: cover; }
         .post-actions { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 20px; color: #666; font-size: 14px; font-weight: 600; }
-
-        /* ESTILOS ESPECÍFICOS POR TIPO DE POST */
-        .alert-post { border: 2px solid #ef4444; }
-        .alert-banner { background-color: #fef2f2; color: #dc2626; padding: 12px 20px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #fee2e2; }
         
-        .vet-post { border-left: 5px solid #0284c7; }
-        .info-post { border-left: 5px solid #F59E2D; }
-
+        /* ALERTAS ESPECIFICAS */
+        .alert-post { border: 2px solid #ef4444; }
+        .alert-banner { background-color: #fef2f2; color: #dc2626; padding: 12px 20px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #fee2e2; border-top: 1px solid #fee2e2; }
         .btn-action-alert { border: none; background: none; cursor: pointer; display: flex; gap: 5px; align-items: center; font-weight: 700; transition: 0.2s; }
         .btn-action-alert:hover { transform: scale(1.05); }
 
-        /* SIDEBAR RIGHT (ADS) */
+        /* SIDEBAR ADS */
         .sidebar-right { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 100px; }
         .ad-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .ad-header { font-size: 12px; font-weight: 700; color: #999; margin-bottom: 15px; text-transform: uppercase; }
@@ -134,12 +69,7 @@
         .ad-info h4 { font-size: 14px; margin-bottom: 3px; }
         .ad-info p { font-size: 11px; color: #666; line-height: 1.4; }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .navbar { padding: 0 20px; }
-            .forum-container { grid-template-columns: 1fr; }
-            .sidebar-left, .sidebar-right { display: none; }
-        }
+        @media (max-width: 992px) { .forum-container { grid-template-columns: 1fr; } .sidebar-left, .sidebar-right { display: none; } }
     </style>
 </head>
 <body>
@@ -147,46 +77,27 @@
    <nav class="navbar">
     <div class="nav-left">
         <a href="dashboard.html" class="nav-icon-btn back-btn" title="Volver al Dashboard">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </a>
         <a href="dashboard.html" class="nav-logo">
             <img src="logoImagen.png" alt="Logo" class="logo-img">
             <img src="logoNombre.png" alt="PAWI" class="logo-text-img">
         </a>
     </div>
-
     <div class="nav-links">
-        <a href="generar_alerta.html" class="nav-icon-btn alert-btn" title="Generar Alerta">
-            🚨
-        </a>
-        
-        <div class="nav-user-badge" onclick="alert('Perfil de usuario en construcción')">
-            <span>👤 <span id="navUserName">Cargando...</span></span>
-        </div>
-        
-        <a href="login.html" class="nav-icon-btn logout-btn" title="Salir">
-            🚪
-        </a>
+        <a href="generar_alerta.html" class="nav-icon-btn alert-btn" title="Generar Alerta">🚨</a>
+        <div class="nav-user-badge"><span>👤 <span id="navUserName">Cargando...</span></span></div>
+        <a href="login.html" class="nav-icon-btn logout-btn" title="Salir">🚪</a>
     </div>
 </nav>
 
     <div class="forum-container">
         
         <div class="sidebar-left">
-            <a href="#" class="menu-item active">
-                <span class="menu-icon">📰</span> Feed Principal
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Funcionalidad en desarrollo')">
-                <span class="menu-icon">📢</span> Alertas Activas
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Funcionalidad en desarrollo')">
-                <span class="menu-icon">🔖</span> Guardados
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Soporte Técnico: 0993919389')">
-                <span class="menu-icon">🎧</span> Soporte Técnico
-            </a>
+            <a href="#" class="menu-item active"><span class="menu-icon">📰</span> Feed Principal</a>
+            <a href="#" class="menu-item" onclick="alert('En desarrollo')"><span class="menu-icon">📢</span> Alertas Activas</a>
+            <a href="#" class="menu-item" onclick="alert('En desarrollo')"><span class="menu-icon">🔖</span> Guardados</a>
+            <a href="#" class="menu-item" onclick="alert('Soporte: 0993919389')"><span class="menu-icon">🎧</span> Soporte Técnico</a>
         </div>
 
         <div class="feed-center">
@@ -194,85 +105,13 @@
             <div class="create-post-card">
                 <div class="user-avatar" id="forumUserInitials">?</div>
                 <div class="post-input-container">
-                    <textarea class="post-input" id="postInputPlaceholder" placeholder="¿Qué estás pensando?" rows="2"></textarea>
-                    <button class="post-submit-btn" onclick="alert('Publicación en construcción')">Publicar</button>
+                    <textarea class="post-input" placeholder="¿Qué estás pensando?" rows="2"></textarea>
+                    <button class="post-submit-btn" onclick="alert('En desarrollo')">Publicar</button>
                 </div>
             </div>
 
-            <div class="post-card alert-post">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Carlos Ruiz</div>
-                        <div class="post-time">Hace 45 min • Urdesa Central</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ¡Ayuda! Se perdió mi Bulldog Francés "Rocco". Es muy asustadizo. Si lo ven, por favor no intenten agarrarlo, llámenme inmediatamente. 🙏
-                </div>
-                <div class="alert-banner">
-                    📍 Visto por última vez: Sector Urdesa Central, cerca del banco.
-                </div>
-                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" class="post-img" alt="Perro Perdido">
-                <div class="post-actions" style="justify-content: space-around; background-color: #fef2f2;">
-                    <button class="btn-action-alert" style="color: #dc2626;">📞 Llamar</button>
-                    <button class="btn-action-alert" style="color: #4b5563;">💬 Tengo info</button>
-                    <button class="btn-action-alert" style="color: #0284c7;">📢 Difundir</button>
-                </div>
-            </div>
-
-            <div class="post-card vet-post">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Dra. Sofía Méndez <span class="post-role">Veterinaria</span></div>
-                        <div class="post-time">Hace 1 hora • Tip de Salud</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ⚠️ <strong>¡Atención dueños!</strong> Si tu mascota presiona su cabeza contra la pared sin razón aparente, no es un juego. Podría ser un signo de daño neurológico o intoxicación. Acude a tu veterinario de confianza inmediatamente si ves este comportamiento. 🏥🐕
-                </div>
-                <div class="post-actions">
-                    <span>❤️ 120 Me gusta</span>
-                    <span>🔄 30 Compartidos</span>
-                </div>
-            </div>
-
-            <div class="post-card info-post">
-                <div class="post-header">
-                    <div class="user-avatar" style="background-color: #F59E2D;">HG</div>
-                    <div>
-                        <div class="post-author">Huellitas GYE <span class="post-role" style="color:#F59E2D; background:#FFF0E6;">Rescate</span></div>
-                        <div class="post-time">Hace 3 horas • Evento Comunitario</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    📢 <strong>Campaña de Esterilización Gratuita</strong><br>
-                    Este fin de semana estaremos en el Parque Samanes recibiendo gatitos y perritos. Recuerden llevarlos en ayunas. ¡Ayúdanos a controlar la sobrepoblación! 🐾
-                </div>
-                <img src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=800&q=80" class="post-img" style="height: 200px;">
-                <div class="post-actions">
-                    <span>❤️ 234 Me gusta</span>
-                    <span>💬 45 Comentarios</span>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Ana López</div>
-                        <div class="post-time">Hace 5 horas • Parque Samanes</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ¡Disfrutando de un domingo soleado! A Max le encanta correr por aquí y hacer nuevos amigos. ¿Alguien más por la zona para jugar? 🌳☀️
-                </div>
-                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" class="post-img">
-                <div class="post-actions">
-                    <span>❤️ 45 Me gusta</span>
-                    <span>💬 12 Comentarios</span>
-                </div>
+            <div id="feedDinamico" class="feed-container" style="margin-top: 20px;">
+                <p style="text-align:center; padding: 30px; color:#888;">Cargando feed...</p>
             </div>
 
         </div>
@@ -288,29 +127,133 @@
                         <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">veterinaria.com</a>
                     </div>
                 </div>
-                <div class="ad-item">
-                    <img src="https://placehold.co/60x60/F59E2D/white?text=SuperCan" class="ad-img" alt="SuperCan Food">
-                    <div class="ad-info">
-                        <h4>SuperCan Food</h4>
-                        <p>Alimento premium para tu mejor amigo.</p>
-                        <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">supercan.ec</a>
-                    </div>
-                </div>
             </div>
         </div>
 
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userName = localStorage.getItem('pawi_user_name');
-            if (userName) {
-                const initials = userName.charAt(0).toUpperCase();
-                const avatar = document.getElementById('forumUserInitials');
-                if (avatar) avatar.innerText = initials;
-            }
-        });
-    </script>
     <script type="module" src="main.js"></script>
+
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { collection, query, where, orderBy, getDocs, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        
+        // Ejecutar carga cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarFeedMixto();
+        });
+
+        async function cargarFeedMixto() {
+            const contenedor = document.getElementById('feedDinamico');
+            
+            try {
+                // 1. Obtener Alertas de Firebase
+                const q = query(collection(db, "alerts"), where("status", "==", "active"), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                
+                let items = [];
+
+                snap.forEach(docSnap => {
+                    items.push({ type: 'alert', id: docSnap.id, ...docSnap.data() });
+                });
+
+                // 2. Datos Simulados (Posts Generales)
+                const postsFalsos = [
+                    {
+                        type: 'vet', authorName: "Dra. Sofía Méndez", role: "Veterinaria", time: "Hace 2 horas",
+                        content: "⚠️ Tip: Si tu mascota presiona su cabeza contra la pared, acude al veterinario urgente.",
+                        likes: 120, avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+                    },
+                    {
+                        type: 'social', authorName: "Carlos Ruiz", time: "Ayer",
+                        content: "¡Tarde de parque con Max! 🌳☀️",
+                        likes: 45, image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80",
+                        avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+                    }
+                ];
+
+                // Unimos todo
+                const feedFinal = [...items, ...postsFalsos];
+                contenedor.innerHTML = "";
+
+                if (feedFinal.length === 0) {
+                    contenedor.innerHTML = "<p style='text-align:center'>No hay actividad.</p>";
+                    return;
+                }
+
+                // 3. Renderizar
+                feedFinal.forEach(item => {
+                    if (item.type === 'alert') {
+                        // RENDERIZAR ALERTA (Diseño Rojo)
+                        const inicial = (item.authorName || "U").charAt(0).toUpperCase();
+                        const uid = auth.currentUser ? auth.currentUser.uid : null;
+                        const yaSumado = item.apoyosUsuarios ? item.apoyosUsuarios.includes(uid) : false;
+
+                        contenedor.innerHTML += `
+                            <div class="post-card alert-post" style="border: 2px solid #ef4444; border-radius: 24px; overflow: hidden; margin-bottom: 30px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                                <div class="post-header" style="padding: 20px; display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 45px; height: 45px; background: #111827; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;">${inicial}</div>
+                                    <div>
+                                        <div style="font-weight: 800; color: #111;">${item.authorName}</div>
+                                        <div style="font-size: 12px; color: #dc2626; font-weight: 700;">🚨 ALERTA ACTIVA • Hace un momento</div>
+                                    </div>
+                                </div>
+                                <div style="padding: 0 20px 15px; color: #333; font-size: 15px;">${item.content}</div>
+                                <div style="background: #fef2f2; color: #dc2626; padding: 12px 20px; font-weight: 700; font-size: 13px; border-top: 1px solid #fee2e2; border-bottom: 1px solid #fee2e2;">
+                                    📍 Visto en: ${item.lastSeenLocation}
+                                </div>
+                                <div style="width: 100%; height: auto; min-height: 300px; background: #f3f4f6;">
+                                    <img src="${item.petPhoto}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: white;">
+                                    <button onclick="window.location.href='mailto:${item.ownerEmail}'" style="border: none; background: none; font-weight: 700; cursor: pointer; color: #dc2626;">📞 Contactar</button>
+                                    <button onclick="window.sumarse('${item.id}')" ${yaSumado ? 'disabled' : ''} style="color: white; background: ${yaSumado ? '#9ca3af' : '#4caf50'}; padding: 8px 20px; border-radius: 30px; border: none; font-weight: 700; cursor: pointer;">
+                                        🐾 ${yaSumado ? 'Sumado' : 'Me sumo'} (${item.apoyos || 0})
+                                    </button>
+                                </div>
+                            </div>`;
+                    } else {
+                        // RENDERIZAR POST GENERAL (Diseño Normal)
+                        contenedor.innerHTML += `
+                            <div class="post-card" style="border-radius: 20px; margin-bottom: 30px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow:hidden;">
+                                <div style="padding: 20px; display: flex; align-items: center; gap: 15px;">
+                                    <img src="${item.avatar}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                                    <div>
+                                        <div style="font-weight: 700; color: #111;">${item.authorName} ${item.role ? `<span style="background:#e0f2fe; color:#0284c7; font-size:10px; padding:2px 6px; border-radius:10px;">${item.role}</span>` : ''}</div>
+                                        <div style="font-size: 12px; color: #999;">${item.time}</div>
+                                    </div>
+                                </div>
+                                <div style="padding: 0 20px 20px; color: #444; font-size: 15px;">${item.content}</div>
+                                ${item.image ? `<img src="${item.image}" style="width: 100%; height: 250px; object-fit: cover;">` : ''}
+                                <div style="padding: 15px 20px; border-top: 1px solid #f3f4f6; color: #666; font-size: 13px; font-weight: 600;">
+                                    ❤️ ${item.likes} Me gusta
+                                </div>
+                            </div>`;
+                    }
+                });
+
+            } catch (e) {
+                console.error("Error foro:", e);
+                contenedor.innerHTML = "<p style='color:red; text-align:center'>⚠️ Error al cargar. Revisa la consola (F12) por si falta el Índice en Firebase.</p>";
+            }
+        }
+
+        // Función Global para el botón
+        window.sumarse = async (id) => {
+            if(!auth.currentUser) return alert("Inicia sesión primero");
+            try {
+                const ref = doc(db, "alerts", id);
+                const snap = await getDoc(ref);
+                if(snap.exists()) {
+                    const d = snap.data();
+                    const usrs = d.apoyosUsuarios || [];
+                    if(!usrs.includes(auth.currentUser.uid)) {
+                        await updateDoc(ref, { apoyos: (d.apoyos||0)+1, apoyosUsuarios: [...usrs, auth.currentUser.uid] });
+                        cargarFeedMixto();
+                    }
+                }
+            } catch(e) { console.error(e); }
+        }
+    </script>
 </body>
 </html>

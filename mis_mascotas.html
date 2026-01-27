@@ -81,87 +81,16 @@
 
     <div class="container">
         <h1 class="page-title">Mis Mascotas Registradas</h1>
+        
         <div class="pets-grid" id="petsContainer">
-            </div>
+            <p style="text-align: center; width: 100%;">Cargando...</p>
+        </div>
     </div>
 
     <footer class="footer">
         <p>📍 Guayaquil, Ecuador | © 2025 PAWI</p>
     </footer>
 
-    <script>
-        // 1. Datos iniciales exclusivos de Stephanie
-        const stephanieExclusives = [
-            { id: 's1', name: 'Max', age: '9 Años', desc: 'Husky siberiano, ojos celestes. Muy amigable con otros perros.', photo: 'Max01.png', qrData: 'MAX-PAWI' },
-            { id: 's2', name: 'Tommy', age: '8 Meses', desc: 'Gato gris con blanco, ojos verdes. Rescatado recientemente.', photo: 'Tommy01.jpeg', qrData: 'TOMMY-PAWI' }
-        ];
-
-        function init() {
-            const container = document.getElementById('petsContainer');
-            
-            // 2. OBTENER USUARIO REAL (Stephanie o Matías)
-            // Esto debe venir del login. Si no existe, usamos un valor por defecto para pruebas.
-            const currentUser = localStorage.getItem('pawi_user_name') || 'Usuario'; 
-            document.getElementById('displayUserName').innerText = currentUser;
-
-            let petsToShow = [];
-
-            // 4. CARGAR MASCOTAS REGISTRADAS POR ESTE USUARIO ESPECÍFICO
-            // Usamos una clave única por usuario: 'pets_Stephanie', 'pets_Matías', etc.
-            const userKey = `pets_${currentUser}`;
-            const userSpecificPets = JSON.parse(localStorage.getItem(userKey)) || [];
-            
-            petsToShow = [...petsToShow, ...userSpecificPets];
-
-            if (petsToShow.length === 0) {
-                container.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px;'>No tienes mascotas registradas. Puedes agregar una en el dashboard.</p>";
-                return;
-            }
-
-            renderPets(petsToShow, container, currentUser);
-        }
-
-        function renderPets(pets, container, user) {
-            container.innerHTML = '';
-            pets.forEach(pet => {
-                const card = document.createElement('div');
-                card.className = 'pet-card';
-                const qrContent = pet.qrData || `${pet.name}-PAWI`;
-                
-                card.innerHTML = `
-                    <div class="pet-photo-header">
-                        <img src="${pet.photo}" alt="${pet.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
-                    </div>
-                    <div class="pet-body">
-                        <div class="pet-name">${pet.name}</div>
-                        <div class="pet-age">${pet.age}</div>
-                        <p class="pet-desc">${pet.desc}</p>
-                    </div>
-                    <div class="qr-wrapper">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${qrContent}" class="qr-code">
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-pet btn-edit" onclick="location.href='registro_mascota.html?id=${pet.id}'">Editar</button>
-                        <button class="btn-pet btn-delete" onclick="deletePet('${pet.id}', '${pet.name}', '${user}')">Eliminar</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function deletePet(id, name, user) {
-            if (confirm(`¿Eliminar a ${name}?`)) {
-                const userKey = `pets_${user}`;
-                let userPets = JSON.parse(localStorage.getItem(userKey)) || [];
-                userPets = userPets.filter(p => p.id !== id);
-                localStorage.setItem(userKey, JSON.stringify(userPets));
-                init();
-            }
-        }
-
-        init();
-    </script>
     <script type="module" src="main.js"></script>
 </body>
-
 </html>

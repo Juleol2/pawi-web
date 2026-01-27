@@ -5,70 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAWI - Mascota Encontrada</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f6f8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; padding: 20px; }
-
-        .alert-card {
-            background-color: white; width: 100%; max-width: 400px; border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px 30px; text-align: center;
-            border-top: 10px solid #F37021;
-        }
-
-        .pet-photo {
-            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-            border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: -80px; background-color: #eee;
-        }
-
-        .title { font-size: 22px; font-weight: 800; color: #111; margin-top: 20px; }
-        .subtitle { font-size: 14px; color: #666; margin-bottom: 20px; }
-        
-        .pet-name { font-size: 28px; font-weight: 800; color: #F37021; margin-bottom: 5px; text-transform: uppercase; }
-        .pet-desc { font-size: 14px; color: #555; background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 25px; }
-
-        /* BOTÓN DE ALERTA */
-        .btn-alert {
-            width: 100%; background-color: #dc2626; color: white; padding: 18px;
-            border: none; border-radius: 15px; font-size: 16px; font-weight: 700;
-            cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-alert:hover { background-color: #b91c1c; transform: scale(1.02); }
-        .btn-alert:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; }
-
-        .status-msg { margin-top: 15px; font-size: 13px; font-weight: 600; color: #059669; display: none; }
-        .loader { display: none; }
-
-    </style>
+    
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // REEMPLAZA ESTO CON TU PUBLIC KEY DE EMAILJS (Paso 1.5)
-          emailjs.init("skj-Hmz-f8o_8cWLO"); 
+          emailjs.init("skj-Hmz-f8o_8cWLO"); // Tu Public Key
        })();
     </script>
-</head>
+
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #f3f4f6; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        /* --- TARJETA PRINCIPAL --- */
+        .card { 
+            background: white; 
+            padding: 0 30px 40px 30px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            max-width: 380px; 
+            width: 100%; 
+            text-align: center;
+            position: relative;
+            margin-top: 50px; /* Espacio para la foto flotante */
+            border-top: 15px solid #F37021; /* Borde Naranja Superior */
+        }
+
+        /* --- FOTO FLOTANTE --- */
+        .img-wrapper {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+            margin: -75px auto 20px auto; /* Margen negativo para que suba */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .pet-img { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            display: block; 
+        }
+
+        /* --- TIPOGRAFÍA --- */
+        h1 { 
+            color: #111; 
+            font-weight: 800; 
+            font-size: 22px; 
+            margin-bottom: 5px; 
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        /* Nombre de la Mascota (Naranja y Grande) */
+        #foundPetName {
+            color: #F37021;
+            font-size: 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 0 0 15px 0;
+            letter-spacing: 1px;
+        }
+
+        /* --- CAJA DE DESCRIPCIÓN --- */
+        .desc-box {
+            background-color: #f9fafb;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            color: #4b5563;
+            font-size: 14px;
+            border: 1px solid #eee;
+        }
+
+        /* --- BOTÓN DE ACCIÓN --- */
+        .btn-action { 
+            background: #dc2626; /* Rojo */
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            border-radius: 20px; 
+            font-weight: 700; 
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+        }
+
+        .btn-action:hover { 
+            background: #b91c1c; 
+            transform: translateY(-2px);
+        }
+        
+        .btn-action:disabled { 
+            background: #ccc; 
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* --- MENSAJES DE ESTADO --- */
+        .status-box { 
+            background: #dcfce7; 
+            color: #166534; 
+            padding: 15px; 
+            border-radius: 15px; 
+            margin-top: 15px; 
+            display: none; 
+            font-size: 13px; 
+            font-weight: 600; 
+        }
+
+        #loadingMsg {
+            font-weight: 600;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="alert-card" id="alertCard" style="display: none;">
-        <img id="foundPetImg" src="" alt="Mascota" class="pet-photo">
+    <div id="loadingMsg">Cargando datos de la mascota...</div>
+
+    <div class="card" id="alertCard" style="display: none;">
         
-        <h1 class="title">¡Hola! ¿Me encontraste?</h1>
+        <div class="img-wrapper">
+            <img id="foundPetImg" class="pet-img" src="" alt="Mascota">
+        </div>
+
+        <h1>¡Hola! ¿Me encontraste?</h1>
         <p class="subtitle">Soy una mascota perdida y mi dueño me está buscando.</p>
         
-        <div class="pet-name" id="foundPetName">...</div>
-        <div class="pet-desc" id="foundPetDesc">...</div>
+        <h2 id="foundPetName">NOMBRE</h2>
 
-        <button id="btnSendLocation" class="btn-alert">
+        <div class="desc-box">
+            <span id="foundPetDesc">Cargando descripción...</span>
+        </div>
+
+        <button id="btnSendLocation" class="btn-action">
             📍 Notificar ubicación al dueño
         </button>
-        
-        <p id="locationStatus" class="status-msg">✅ ¡Ubicación enviada con éxito!</p>
-    </div>
 
-    <div id="loadingMsg">Cargando datos de la mascota...</div>
+        <div id="locationStatus" class="status-box">
+            ✅ ¡Gracias! Se envió la ubicación y un correo al dueño.
+        </div>
+    </div>
 
     <script type="module" src="main.js"></script>
 </body>
