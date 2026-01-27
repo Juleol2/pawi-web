@@ -211,52 +211,61 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUserPets(userId) {
     const grid = document.getElementById('petsContainer');
     if (!grid) return;
-    
-    grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Cargando mascotas...</p>";
-    const currentUser = localStorage.getItem('pawi_user_name') || "";
 
     try {
         const q = query(collection(db, "pets"), where("ownerId", "==", userId));
         const snap = await getDocs(q);
-        let petsList = [];
+        let list = [];
 
-        // Datos fijos SOLO para Stephanie (Demo)
-        if (currentUser.toLowerCase().includes('stephanie')) {
-            petsList.push({ id: 's1', name: 'Max', age: '9 Años', description: 'Husky siberiano, ojos celestes.', photo: 'Max01.png' });
-            petsList.push({ id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato gris con blanco.', photo: 'Tommy01.jpeg' });
+        // Recuperar lógica de Stephanie (Max y Tommy)
+        const name = localStorage.getItem('pawi_user_name') || "";
+        if (name.toLowerCase().includes('stephanie')) {
+            list.push(
+                { id: 's1', name: 'Max', age: '9 Años', description: 'Husky siberiano, ojos celestes.', photo: 'Max01.png' },
+                { id: 's2', name: 'Tommy', age: '8 Meses', description: 'Gato gris con blanco.', photo: 'Tommy01.jpeg' }
+            );
         }
 
-        snap.forEach(d => petsList.push({ id: d.id, ...d.data() }));
-        grid.innerHTML = "";
+        snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+        grid.innerHTML = list.length ? "" : "<p style='grid-column: 1/-1; text-align: center;'>Aún no tienes mascotas registradas.</p>";
 
-        if (petsList.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No tienes mascotas aún.</p>";
-            return;
-        }
-
-        petsList.forEach(pet => {
-            // Generar URL para QR (apunta a encontrado.html)
-            // ESTA ES LA SOLUCIÓN:
-// Obtenemos la ruta completa actual y le quitamos el nombre del archivo (mis_mascotas.html)
-const currentUrl = window.location.href;
-const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-const qrLink = `${basePath}/encontrado.html?id=${pet.id}`;
+        list.forEach(p => {
+            // --- CORRECCIÓN DEL LINK DEL QR ---
+            // Esto asegura que si estás en /pawi-app/, el link incluya /pawi-app/
+            const currentUrl = window.location.href;
+            const basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+            const fullLink = `${basePath}/encontrado.html?id=${p.id}`;
             
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
+            // ----------------------------------
+
             grid.innerHTML += `
                 <div class="pet-card">
-                    <div class="pet-photo-header"><img src="${pet.photo}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'"></div>
+                    <div class="pet-photo-header"><img src="${p.photo}"></div>
                     <div class="pet-body">
-                        <div class="pet-name">${pet.name}</div>
-                        <div class="pet-age">${pet.age}</div>
-                        <p class="pet-desc">${pet.description}</p>
+                        <div class="pet-name">${p.name}</div>
+                        <div class="pet-age">${p.age}</div>
+                        <p class="pet-desc">${p.description}</p>
                     </div>
                     <div class="qr-wrapper"><img src="${qrUrl}" class="qr-code"></div>
                     <div class="card-actions">
                         <button class="btn-pet btn-edit" onclick="alert('Editar próximamente')">Editar</button>
-                        <button class="btn-pet btn-delete" data-id="${pet.id}">Eliminar</button>
+                        <button class="btn-pet btn-delete" data-id="${p.id}">Eliminar</button>
                     </div>
                 </div>`;
         });
+
+        // Eventos de eliminación
+        grid.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = async (e) => {
+                if (confirm("¿Borrar esta mascota?")) {
+                    await deleteDoc(doc(db, "pets", e.target.dataset.id));
+                    location.reload();
+                }
+            };
+        });
+    } catch (e) { console.error("Error cargando mascotas", e); }
+}
 
         // Activar botones de eliminar
         document.querySelectorAll('.btn-delete').forEach(btn => {
@@ -274,3 +283,4 @@ const qrLink = `${basePath}/encontrado.html?id=${pet.id}`;
     }
 
 }
+
