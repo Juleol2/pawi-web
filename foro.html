@@ -22,12 +22,10 @@
         }
         
         .nav-left { display: flex; align-items: center; gap: 20px; }
-
         .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
         .logo-img { height: 45px; width: auto; } 
         .logo-text-img { height: 30px; width: auto; margin-top: 5px; }
 
-        /* Botones de icono en navbar */
         .nav-icon-btn {
             font-size: 22px; text-decoration: none; color: #555;
             transition: all 0.2s; display: flex; align-items: center; justify-content: center;
@@ -35,28 +33,21 @@
         }
         .nav-icon-btn:hover { transform: scale(1.1); background-color: #FFF0E6; color: #F59E2D; }
         
-        /* Flecha de regreso (SVG) */
         .back-btn svg { stroke: #555; transition: stroke 0.2s; }
         .back-btn:hover svg { stroke: #F59E2D; }
 
-        /* --- BOTÓN ALERTA CON ANIMACIÓN --- */
         .alert-btn { 
             color: #dc2626; 
             background-color: #fef2f2;
-            /* Aquí está la animación agregada: */
             animation: pulse-red 2s infinite;
         }
-        .alert-btn:hover { background-color: #fee2e2; color: #b91c1c; }
 
-        /* Definición de la animación de pulso */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
             100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
         }
 
-        .logout-btn:hover { color: #dc2626; background-color: #fef2f2; }
-        
         .nav-links { display: flex; align-items: center; gap: 15px; }
 
         .nav-user-badge {
@@ -73,7 +64,6 @@
             display: grid; grid-template-columns: 250px 1fr 300px; gap: 30px; align-items: start;
         }
 
-        /* SIDEBAR LEFT */
         .sidebar-left { background: transparent; display: flex; flex-direction: column; gap: 10px; position: sticky; top: 100px; }
         .menu-item { 
             display: flex; align-items: center; gap: 15px; padding: 15px; 
@@ -103,29 +93,27 @@
             align-self: flex-end; background-color: #F59E2D; color: white; border: none;
             padding: 8px 25px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: background-color 0.2s;
         }
-        .post-submit-btn:hover { background-color: #e08e20; }
 
         /* ESTILOS DE POST */
-        .post-card { background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; }
+        .post-card { background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px; }
         .post-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
         .post-author { font-weight: 700; color: #111; }
         .post-role { font-size: 11px; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 10px; margin-left: 5px; font-weight: 600; }
         .post-time { font-size: 12px; color: #999; }
         .post-content { padding: 0 20px 20px; color: #444; line-height: 1.5; }
-        .post-img { width: 100%; height: 350px; object-fit: cover; }
+        .post-img { width: 100%; height: 350px; object-fit: cover; display: block; }
         .post-actions { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 20px; color: #666; font-size: 14px; font-weight: 600; }
 
-        /* ESTILOS ESPECÍFICOS POR TIPO DE POST */
+        /* TIPOS DE POST */
         .alert-post { border: 2px solid #ef4444; }
         .alert-banner { background-color: #fef2f2; color: #dc2626; padding: 12px 20px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #fee2e2; }
-        
         .vet-post { border-left: 5px solid #0284c7; }
         .info-post { border-left: 5px solid #F59E2D; }
 
         .btn-action-alert { border: none; background: none; cursor: pointer; display: flex; gap: 5px; align-items: center; font-weight: 700; transition: 0.2s; }
         .btn-action-alert:hover { transform: scale(1.05); }
 
-        /* SIDEBAR RIGHT (ADS) */
+        /* SIDEBAR RIGHT */
         .sidebar-right { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 100px; }
         .ad-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .ad-header { font-size: 12px; font-weight: 700; color: #999; margin-bottom: 15px; text-transform: uppercase; }
@@ -134,9 +122,7 @@
         .ad-info h4 { font-size: 14px; margin-bottom: 3px; }
         .ad-info p { font-size: 11px; color: #666; line-height: 1.4; }
 
-        /* Responsive */
         @media (max-width: 992px) {
-            .navbar { padding: 0 20px; }
             .forum-container { grid-template-columns: 1fr; }
             .sidebar-left, .sidebar-right { display: none; }
         }
@@ -144,9 +130,9 @@
 </head>
 <body>
 
-   <nav class="navbar">
+<nav class="navbar">
     <div class="nav-left">
-        <a href="dashboard.html" class="nav-icon-btn back-btn" title="Volver al Dashboard">
+        <a href="dashboard.html" class="nav-icon-btn back-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
@@ -158,159 +144,136 @@
     </div>
 
     <div class="nav-links">
-        <a href="generar_alerta.html" class="nav-icon-btn alert-btn" title="Generar Alerta">
-            🚨
-        </a>
-        
-        <div class="nav-user-badge" onclick="alert('Perfil de usuario en construcción')">
+        <a href="generar_alerta.html" class="nav-icon-btn alert-btn">🚨</a>
+        <div class="nav-user-badge">
             <span>👤 <span id="navUserName">Cargando...</span></span>
         </div>
-        
-        <a href="login.html" class="nav-icon-btn logout-btn" title="Salir">
-            🚪
-        </a>
+        <a href="login.html" class="nav-icon-btn logout-btn">🚪</a>
     </div>
 </nav>
 
-    <div class="forum-container">
-        
-        <div class="sidebar-left">
-            <a href="#" class="menu-item active">
-                <span class="menu-icon">📰</span> Feed Principal
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Funcionalidad en desarrollo')">
-                <span class="menu-icon">📢</span> Alertas Activas
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Funcionalidad en desarrollo')">
-                <span class="menu-icon">🔖</span> Guardados
-            </a>
-            <a href="#" class="menu-item" onclick="alert('Soporte Técnico: 0993919389')">
-                <span class="menu-icon">🎧</span> Soporte Técnico
-            </a>
-        </div>
-
-        <div class="feed-center">
-            
-            <div class="create-post-card">
-                <div class="user-avatar" id="forumUserInitials">?</div>
-                <div class="post-input-container">
-                    <textarea class="post-input" id="postInputPlaceholder" placeholder="¿Qué estás pensando?" rows="2"></textarea>
-                    <button class="post-submit-btn" onclick="alert('Publicación en construcción')">Publicar</button>
-                </div>
-            </div>
-
-            <div class="post-card alert-post">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Carlos Ruiz</div>
-                        <div class="post-time">Hace 45 min • Urdesa Central</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ¡Ayuda! Se perdió mi Bulldog Francés "Rocco". Es muy asustadizo. Si lo ven, por favor no intenten agarrarlo, llámenme inmediatamente. 🙏
-                </div>
-                <div class="alert-banner">
-                    📍 Visto por última vez: Sector Urdesa Central, cerca del banco.
-                </div>
-                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" class="post-img" alt="Perro Perdido">
-                <div class="post-actions" style="justify-content: space-around; background-color: #fef2f2;">
-                    <button class="btn-action-alert" style="color: #dc2626;">📞 Llamar</button>
-                    <button class="btn-action-alert" style="color: #4b5563;">💬 Tengo info</button>
-                    <button class="btn-action-alert" style="color: #0284c7;">📢 Difundir</button>
-                </div>
-            </div>
-
-            <div class="post-card vet-post">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Dra. Sofía Méndez <span class="post-role">Veterinaria</span></div>
-                        <div class="post-time">Hace 1 hora • Tip de Salud</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ⚠️ <strong>¡Atención dueños!</strong> Si tu mascota presiona su cabeza contra la pared sin razón aparente, no es un juego. Podría ser un signo de daño neurológico o intoxicación. Acude a tu veterinario de confianza inmediatamente si ves este comportamiento. 🏥🐕
-                </div>
-                <div class="post-actions">
-                    <span>❤️ 120 Me gusta</span>
-                    <span>🔄 30 Compartidos</span>
-                </div>
-            </div>
-
-            <div class="post-card info-post">
-                <div class="post-header">
-                    <div class="user-avatar" style="background-color: #F59E2D;">HG</div>
-                    <div>
-                        <div class="post-author">Huellitas GYE <span class="post-role" style="color:#F59E2D; background:#FFF0E6;">Rescate</span></div>
-                        <div class="post-time">Hace 3 horas • Evento Comunitario</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    📢 <strong>Campaña de Esterilización Gratuita</strong><br>
-                    Este fin de semana estaremos en el Parque Samanes recibiendo gatitos y perritos. Recuerden llevarlos en ayunas. ¡Ayúdanos a controlar la sobrepoblación! 🐾
-                </div>
-                <img src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=800&q=80" class="post-img" style="height: 200px;">
-                <div class="post-actions">
-                    <span>❤️ 234 Me gusta</span>
-                    <span>💬 45 Comentarios</span>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
-                    <div>
-                        <div class="post-author">Ana López</div>
-                        <div class="post-time">Hace 5 horas • Parque Samanes</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    ¡Disfrutando de un domingo soleado! A Max le encanta correr por aquí y hacer nuevos amigos. ¿Alguien más por la zona para jugar? 🌳☀️
-                </div>
-                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80" class="post-img">
-                <div class="post-actions">
-                    <span>❤️ 45 Me gusta</span>
-                    <span>💬 12 Comentarios</span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="sidebar-right">
-            <div class="ad-card">
-                <div class="ad-header">Publicidad Sugerida</div>
-                <div class="ad-item">
-                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=200&q=80" class="ad-img">
-                    <div class="ad-info">
-                        <h4>VetCare 24/7</h4>
-                        <p>Chequeo general a mitad de precio.</p>
-                        <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">veterinaria.com</a>
-                    </div>
-                </div>
-                <div class="ad-item">
-                    <img src="https://placehold.co/60x60/F59E2D/white?text=SuperCan" class="ad-img" alt="SuperCan Food">
-                    <div class="ad-info">
-                        <h4>SuperCan Food</h4>
-                        <p>Alimento premium para tu mejor amigo.</p>
-                        <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">supercan.ec</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<div class="forum-container">
+    <div class="sidebar-left">
+        <a href="#" class="menu-item active"><span class="menu-icon">📰</span> Feed Principal</a>
+        <a href="#" class="menu-item"> <span class="menu-icon">📢</span> Alertas Activas</a>
+        <a href="#" class="menu-item"> <span class="menu-icon">🔖</span> Guardados</a>
+        <a href="#" class="menu-item"> <span class="menu-icon">🎧</span> Soporte Técnico</a>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userName = localStorage.getItem('pawi_user_name');
-            if (userName) {
-                const initials = userName.charAt(0).toUpperCase();
-                const avatar = document.getElementById('forumUserInitials');
-                if (avatar) avatar.innerText = initials;
-            }
-        });
-    </script>
-    <script type="module" src="main.js"></script>
+    <div class="feed-center">
+        <div class="create-post-card">
+            <div class="user-avatar" id="forumUserInitials">?</div>
+            <div class="post-input-container">
+                <textarea class="post-input" id="postInputPlaceholder" placeholder="¿Qué estás pensando?" rows="2"></textarea>
+                <button class="post-submit-btn">Publicar</button>
+            </div>
+        </div>
+
+        <div id="feedDinamico"></div>
+
+        <div class="post-card alert-post">
+            <div class="post-header">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
+                <div>
+                    <div class="post-author">Carlos Ruiz</div>
+                    <div class="post-time">Hace 45 min • Urdesa Central</div>
+                </div>
+            </div>
+            <div class="post-content">
+                ¡Ayuda! Se perdió mi Bulldog Francés "Rocco". Es muy asustadizo. Si lo ven, por favor no intenten agarrarlo, llámenme inmediatamente. 🙏
+            </div>
+            <div class="alert-banner">
+                📍 Visto por última vez: Sector Urdesa Central, cerca del banco.
+            </div>
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800" class="post-img">
+            <div class="post-actions" style="justify-content: space-around; background-color: #fef2f2;">
+                <button class="btn-action-alert" style="color: #dc2626;">📞 Llamar</button>
+                <button class="btn-action-alert" style="color: #4b5563;">💬 Tengo info</button>
+                <button class="btn-action-alert" style="color: #0284c7;">📢 Difundir</button>
+            </div>
+        </div>
+
+        <div class="post-card vet-post">
+            <div class="post-header">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="user-avatar">
+                <div>
+                    <div class="post-author">Dra. Sofía Méndez <span class="post-role">Veterinaria</span></div>
+                    <div class="post-time">Hace 1 hora • Tip de Salud</div>
+                </div>
+            </div>
+            <div class="post-content">
+                ⚠️ <strong>¡Atención dueños!</strong> Si tu mascota presiona su cabeza contra la pared sin razón aparente, no es un juego. Podría ser un signo de daño neurológico.
+            </div>
+            <div class="post-actions">
+                <span>❤️ 120 Me gusta</span>
+                <span>🔄 30 Compartidos</span>
+            </div>
+        </div>
+
+        <div class="post-card info-post">
+            <div class="post-header">
+                <div class="user-avatar" style="background-color: #F59E2D;">HG</div>
+                <div>
+                    <div class="post-author">Huellitas GYE <span class="post-role" style="color:#F59E2D; background:#FFF0E6;">Rescate</span></div>
+                    <div class="post-time">Hace 3 horas • Evento</div>
+                </div>
+            </div>
+            <div class="post-content">
+                📢 <strong>Campaña de Esterilización Gratuita</strong><br>
+                Este fin de semana estaremos en el Parque Samanes. ¡Ayúdanos a controlar la sobrepoblación! 🐾
+            </div>
+            <img src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?w=800" class="post-img" style="height: 200px;">
+        </div>
+
+        <div class="post-card">
+            <div class="post-header">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
+                <div>
+                    <div class="post-author">Ana López</div>
+                    <div class="post-time">Hace 5 horas • Parque Samanes</div>
+                </div>
+            </div>
+            <div class="post-content">
+                ¡Disfrutando de un domingo soleado! A Max le encanta correr por aquí. ¿Alguien más por la zona? 🌳☀️
+            </div>
+            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800" class="post-img">
+        </div>
+    </div>
+
+    <div class="sidebar-right">
+        <div class="ad-card">
+            <div class="ad-header">Sugerido</div>
+            <div class="ad-item">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=200" class="ad-img">
+                <div class="ad-info">
+                    <h4>VetCare 24/7</h4>
+                    <p>Chequeo general a mitad de precio.</p>
+                    <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">veterinaria.com</a>
+            </div>
+        </div>
+        <div class="ad-item">
+            <img src="https://placehold.co/60x60/F59E2D/white?text=SuperCan" class="ad-img">
+            <div class="ad-info">
+                <h4>SuperCan Food</h4>
+                <p>Alimento premium para tu mejor amigo.</p>
+                <a href="#" style="font-size:10px; color:#F59E2D; font-weight:700;">supercan.ec</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const userName = localStorage.getItem('pawi_user_name');
+        if (userName) {
+            const initials = userName.charAt(0).toUpperCase();
+            const avatar = document.getElementById('forumUserInitials');
+            if (avatar) avatar.innerText = initials;
+            const firstName = userName.split(' ')[0];
+            document.getElementById('postInputPlaceholder').placeholder = `¿Qué estás pensando, ${firstName}?`;
+        }
+    });
+</script>
+<script type="module" src="main.js"></script>
 </body>
 </html>
